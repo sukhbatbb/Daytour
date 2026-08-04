@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin — Mongol.Tours</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css?v=2">
 <meta name="robots" content="noindex, nofollow">
 <style>
-  body{ background:var(--sand); }
-  .admin-nav{ background:var(--sky); color:var(--white); padding:16px 0; }
+  body{ background:var(--paper); }
+  .admin-nav{ background:var(--ink); color:var(--white); padding:16px 0; }
   .admin-nav .wrap{ display:flex; justify-content:space-between; align-items:center; }
   .admin-nav a{ color:var(--white); }
   #login-screen{ max-width:380px; margin:120px auto; }
@@ -31,7 +31,7 @@
   .list-editor .list-item{ display:flex; gap:.5rem; margin-bottom:.5rem; }
   .list-editor .list-item input,.list-editor .list-item textarea{ flex:1; }
   .list-editor button.remove{ flex-shrink:0; }
-  .subtle-btn{ background:none; border:none; cursor:pointer; font-family:var(--font-mono); font-size:.72rem; text-decoration:underline; color:var(--azure); padding:0; }
+  .subtle-btn{ background:none; border:none; cursor:pointer; font-family:var(--font-mono); font-size:.72rem; text-decoration:underline; color:var(--forest); padding:0; }
 </style>
 </head>
 <body>
@@ -55,6 +55,14 @@
   <section style="padding-top:32px;">
     <div class="wrap">
 
+      <div class="tour-tabs" id="section-switch" style="margin-bottom:2.4rem; border-bottom:1px solid var(--line); padding-bottom:1.4rem;">
+        <button data-section="tours" class="active">Tours</button>
+        <button data-section="destinations">Destinations</button>
+        <button data-section="testimonials">Testimonials</button>
+        <button data-section="content">About &amp; FAQ</button>
+      </div>
+
+      <div id="section-tours">
       <div id="list-view">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.6rem;">
           <h2 style="margin:0;">Tours</h2>
@@ -173,13 +181,63 @@
         </div>
 
       </div>
+      </div><!-- /section-tours -->
+
+      <div id="section-destinations" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.6rem;">
+          <h2 style="margin:0;">Destinations</h2>
+          <div style="display:flex; gap:.6rem;">
+            <button class="btn btn-sm" id="add-destination-btn">+ Add destination</button>
+            <button class="btn btn-primary btn-sm" id="save-destinations-btn">Save all</button>
+          </div>
+        </div>
+        <p class="muted" style="font-size:.85rem; margin-bottom:1.4rem;">Mark one destination "Featured" to give it the spotlight layout on the Destinations page (used for Mongol Culture Park). Unpublished destinations are hidden from the public site.</p>
+        <div id="destinations-list"></div>
+      </div>
+
+      <div id="section-testimonials" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.6rem;">
+          <h2 style="margin:0;">Testimonials</h2>
+          <div style="display:flex; gap:.6rem;">
+            <button class="btn btn-sm" id="add-testimonial-btn">+ Add testimonial</button>
+            <button class="btn btn-primary btn-sm" id="save-testimonials-btn">Save all</button>
+          </div>
+        </div>
+        <div id="testimonials-list"></div>
+      </div>
+
+      <div id="section-content" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.6rem;">
+          <h2 style="margin:0;">About &amp; FAQ</h2>
+          <button class="btn btn-primary btn-sm" id="save-content-btn">Save</button>
+        </div>
+
+        <div class="editor-section">
+          <h4>About — Mongolia intro</h4>
+          <p class="muted" style="font-size:.82rem; margin-top:-.6em; margin-bottom:1em;">Shown on the About page under "A country still measured in horses and horizon". Use blank lines for new paragraphs.</p>
+          <div class="field"><textarea id="c-mongolia-intro" style="min-height:160px;"></textarea></div>
+        </div>
+
+        <div class="editor-section">
+          <h4>About — Company story</h4>
+          <p class="muted" style="font-size:.82rem; margin-top:-.6em; margin-bottom:1em;">Shown under "About Mongol.Tours" — founding story, team, guides.</p>
+          <div class="field"><textarea id="c-company-story" style="min-height:160px;"></textarea></div>
+        </div>
+
+        <div class="editor-section">
+          <h4>FAQ</h4>
+          <div id="c-faq-list" class="list-editor"></div>
+          <button class="subtle-btn" id="c-add-faq-item">+ Add question</button>
+        </div>
+      </div>
+
     </div>
   </section>
 </div>
 
 <script type="module">
   import { auth, db, signInWithEmailAndPassword, onAuthStateChanged, signOut,
-           collection, doc, getDocs, addDoc, setDoc, deleteDoc, query, where }
+           collection, doc, getDoc, getDocs, addDoc, setDoc, deleteDoc, query, where }
     from "/assets/js/firebase-init.js";
 
   const loginScreen = document.getElementById("login-screen");
@@ -210,6 +268,27 @@
       appEl.style.display = "none";
       who.innerHTML = "";
     }
+  });
+
+  // ---------------- Section switcher ----------------
+  const sections = {
+    tours: document.getElementById("section-tours"),
+    destinations: document.getElementById("section-destinations"),
+    testimonials: document.getElementById("section-testimonials"),
+    content: document.getElementById("section-content")
+  };
+  const sectionLoaders = {
+    destinations: () => loadDestinations(),
+    testimonials: () => loadTestimonials(),
+    content: () => loadContent()
+  };
+  document.querySelectorAll("#section-switch button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("#section-switch button").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      Object.entries(sections).forEach(([key, el]) => { el.style.display = key === btn.dataset.section ? "block" : "none"; });
+      if (sectionLoaders[btn.dataset.section]) sectionLoaders[btn.dataset.section]();
+    });
   });
 
   // ---------------- List view ----------------
@@ -503,6 +582,279 @@
     editorView.style.display = "none";
     listView.style.display = "block";
     loadList(currentCat);
+  });
+
+  // ============================================================
+  // Shared: resize + upload an image file via the upload-image function
+  // ============================================================
+  async function uploadImageFile(file, folder) {
+    const dataUrl = await resizeImage(file);
+    const res = await fetch("/.netlify/functions/upload-image", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        filename: file.name.replace(/\.\w+$/, ".jpg"),
+        contentBase64: dataUrl,
+        folder
+      })
+    });
+    if (!res.ok) throw new Error(await res.text());
+    const { url } = await res.json();
+    return url;
+  }
+
+  // ============================================================
+  // Destinations
+  // ============================================================
+  const destinationsListEl = document.getElementById("destinations-list");
+
+  async function loadDestinations() {
+    destinationsListEl.innerHTML = `<div class="empty-state">Loading…</div>`;
+    const snap = await getDocs(collection(db, "destinations"));
+    const items = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => (a.order??99)-(b.order??99));
+    destinationsListEl.innerHTML = "";
+    items.forEach(addDestinationRow);
+    if (!items.length) addDestinationRow();
+  }
+
+  function addDestinationRow(d = {}) {
+    const row = document.createElement("div");
+    row.className = "editor-section";
+    row.dataset.id = d.id || "";
+    row.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:1rem;">
+        <div style="flex:1;">
+          <div class="row2">
+            <div class="field"><label>Title</label><input class="d-title" value="${(d.title||"").replace(/"/g,"&quot;")}"></div>
+            <div class="field"><label>Slug (used as page anchor)</label><input class="d-slug" value="${(d.slug||"").replace(/"/g,"&quot;")}" placeholder="e.g. mongol-culture-park"></div>
+          </div>
+          <div class="field"><label>Description</label><textarea class="d-description" style="min-height:80px;">${d.description||""}</textarea></div>
+          <div class="field">
+            <label>Image</label>
+            <div class="d-preview-wrap" style="display:${d.image ? "block":"none"}; margin-bottom:.6em;">
+              <img class="d-preview" src="${d.image||""}" style="max-width:100%; max-height:160px; border-radius:3px; border:1px solid var(--line);">
+            </div>
+            <div style="display:flex; gap:.6em; align-items:center; flex-wrap:wrap;">
+              <input type="file" class="d-file" accept="image/*">
+              <button class="btn btn-sm d-upload-btn" type="button">Upload</button>
+              <span class="d-upload-status muted" style="font-size:.8rem;"></span>
+            </div>
+            <input class="d-image" value="${(d.image||"").replace(/"/g,"&quot;")}" placeholder="https://raw.githubusercontent.com/..." style="margin-top:.6em;">
+          </div>
+          <div class="row2">
+            <div class="field"><label>Order</label><input class="d-order" type="number" value="${d.order ?? ""}"></div>
+            <div class="field" style="display:flex; gap:1.5rem; align-items:center; padding-top:1.8em;">
+              <label style="display:flex; align-items:center; gap:.5em; text-transform:none;"><input type="checkbox" class="d-featured" ${d.featured?"checked":""} style="width:auto;"> Featured</label>
+              <label style="display:flex; align-items:center; gap:.5em; text-transform:none;"><input type="checkbox" class="d-published" ${d.published!==false?"checked":""} style="width:auto;"> Published</label>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-sm btn-danger d-remove" type="button">Remove</button>
+      </div>
+    `;
+    row.querySelector(".d-remove").addEventListener("click", () => row.remove());
+    const preview = row.querySelector(".d-preview");
+    const previewWrap = row.querySelector(".d-preview-wrap");
+    const imageInput = row.querySelector(".d-image");
+    imageInput.addEventListener("change", () => {
+      if (imageInput.value.trim()) { preview.src = imageInput.value.trim(); previewWrap.style.display = "block"; }
+      else previewWrap.style.display = "none";
+    });
+    row.querySelector(".d-upload-btn").addEventListener("click", async () => {
+      const fileInput = row.querySelector(".d-file");
+      const status = row.querySelector(".d-upload-status");
+      const file = fileInput.files[0];
+      if (!file) { status.textContent = "Choose a file first."; return; }
+      status.textContent = "Uploading…";
+      try {
+        const slug = row.querySelector(".d-slug").value.trim() || "destination";
+        const url = await uploadImageFile(file, `destinations/${slug}`);
+        imageInput.value = url;
+        preview.src = url;
+        previewWrap.style.display = "block";
+        status.textContent = "Uploaded ✓";
+        fileInput.value = "";
+      } catch (err) {
+        console.error(err);
+        status.textContent = "Upload failed.";
+      }
+    });
+    destinationsListEl.appendChild(row);
+  }
+
+  document.getElementById("add-destination-btn").addEventListener("click", () => addDestinationRow());
+  document.getElementById("save-destinations-btn").addEventListener("click", async () => {
+    const btn = document.getElementById("save-destinations-btn");
+    btn.disabled = true;
+    btn.textContent = "Saving…";
+    try {
+      const rows = [...destinationsListEl.querySelectorAll(".editor-section")];
+      let order = 1;
+      for (const row of rows) {
+        const title = row.querySelector(".d-title").value.trim();
+        if (!title) continue;
+        const data = {
+          title,
+          slug: row.querySelector(".d-slug").value.trim(),
+          description: row.querySelector(".d-description").value.trim(),
+          image: row.querySelector(".d-image").value.trim(),
+          order: row.querySelector(".d-order").value ? Number(row.querySelector(".d-order").value) : order,
+          featured: row.querySelector(".d-featured").checked,
+          published: row.querySelector(".d-published").checked
+        };
+        order++;
+        if (row.dataset.id) {
+          await setDoc(doc(db, "destinations", row.dataset.id), data, { merge: true });
+        } else {
+          const ref = await addDoc(collection(db, "destinations"), data);
+          row.dataset.id = ref.id;
+        }
+      }
+      btn.textContent = "Saved ✓";
+    } catch (err) {
+      console.error(err);
+      btn.textContent = "Save failed";
+    } finally {
+      setTimeout(() => { btn.disabled = false; btn.textContent = "Save all"; }, 1500);
+    }
+  });
+
+  // ============================================================
+  // Testimonials
+  // ============================================================
+  const testimonialsListEl = document.getElementById("testimonials-list");
+
+  async function loadTestimonials() {
+    testimonialsListEl.innerHTML = `<div class="empty-state">Loading…</div>`;
+    const snap = await getDocs(collection(db, "testimonials"));
+    const items = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => (a.order??99)-(b.order??99));
+    testimonialsListEl.innerHTML = "";
+    items.forEach(addTestimonialRow);
+    if (!items.length) addTestimonialRow();
+  }
+
+  function addTestimonialRow(t = {}) {
+    const row = document.createElement("div");
+    row.className = "editor-section";
+    row.dataset.id = t.id || "";
+    row.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:1rem;">
+        <div style="flex:1;">
+          <div class="row2">
+            <div class="field"><label>Name</label><input class="ts-name" value="${(t.name||"").replace(/"/g,"&quot;")}"></div>
+            <div class="field"><label>Trip (optional)</label><input class="ts-trip" value="${(t.trip||"").replace(/"/g,"&quot;")}"></div>
+          </div>
+          <div class="field"><label>Quote</label><textarea class="ts-quote" style="min-height:80px;">${t.quote||""}</textarea></div>
+          <div class="row2">
+            <div class="field"><label>Order</label><input class="ts-order" type="number" value="${t.order ?? ""}"></div>
+            <div class="field" style="display:flex; align-items:center; padding-top:1.8em;">
+              <label style="display:flex; align-items:center; gap:.5em; text-transform:none;"><input type="checkbox" class="ts-published" ${t.published!==false?"checked":""} style="width:auto;"> Published</label>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-sm btn-danger ts-remove" type="button">Remove</button>
+      </div>
+    `;
+    row.querySelector(".ts-remove").addEventListener("click", () => row.remove());
+    testimonialsListEl.appendChild(row);
+  }
+
+  document.getElementById("add-testimonial-btn").addEventListener("click", () => addTestimonialRow());
+  document.getElementById("save-testimonials-btn").addEventListener("click", async () => {
+    const btn = document.getElementById("save-testimonials-btn");
+    btn.disabled = true;
+    btn.textContent = "Saving…";
+    try {
+      const rows = [...testimonialsListEl.querySelectorAll(".editor-section")];
+      let order = 1;
+      for (const row of rows) {
+        const name = row.querySelector(".ts-name").value.trim();
+        const quote = row.querySelector(".ts-quote").value.trim();
+        if (!name || !quote) continue;
+        const data = {
+          name,
+          trip: row.querySelector(".ts-trip").value.trim(),
+          quote,
+          order: row.querySelector(".ts-order").value ? Number(row.querySelector(".ts-order").value) : order,
+          published: row.querySelector(".ts-published").checked
+        };
+        order++;
+        if (row.dataset.id) {
+          await setDoc(doc(db, "testimonials", row.dataset.id), data, { merge: true });
+        } else {
+          const ref = await addDoc(collection(db, "testimonials"), data);
+          row.dataset.id = ref.id;
+        }
+      }
+      btn.textContent = "Saved ✓";
+    } catch (err) {
+      console.error(err);
+      btn.textContent = "Save failed";
+    } finally {
+      setTimeout(() => { btn.disabled = false; btn.textContent = "Save all"; }, 1500);
+    }
+  });
+
+  // ============================================================
+  // About & FAQ (siteContent/about, siteContent/faq)
+  // ============================================================
+  const cFaqListEl = document.getElementById("c-faq-list");
+  let contentLoaded = false;
+
+  function addContentFaqRow(q = "", a = "") {
+    const row = document.createElement("div");
+    row.className = "list-item";
+    row.innerHTML = `
+      <input placeholder="Question" class="c-faq-q" value="${q.replace(/"/g,"&quot;")}">
+      <textarea placeholder="Answer" class="c-faq-a" style="min-height:44px;">${a}</textarea>
+      <button class="btn btn-sm remove" type="button">✕</button>
+    `;
+    row.querySelector(".remove").addEventListener("click", () => row.remove());
+    cFaqListEl.appendChild(row);
+  }
+  document.getElementById("c-add-faq-item").addEventListener("click", () => addContentFaqRow());
+
+  async function loadContent() {
+    if (contentLoaded) return;
+    contentLoaded = true;
+    const [aboutSnap, faqSnap] = await Promise.all([
+      getDoc(doc(db, "siteContent", "about")),
+      getDoc(doc(db, "siteContent", "faq"))
+    ]);
+    const about = aboutSnap.exists() ? aboutSnap.data() : {};
+    document.getElementById("c-mongolia-intro").value = about.mongoliaIntro || "";
+    document.getElementById("c-company-story").value = about.companyStory || "";
+
+    const faqItems = faqSnap.exists() ? (faqSnap.data().items || []) : [];
+    cFaqListEl.innerHTML = "";
+    faqItems.forEach(f => addContentFaqRow(f.q, f.a));
+    if (!faqItems.length) addContentFaqRow();
+  }
+
+  document.getElementById("save-content-btn").addEventListener("click", async () => {
+    const btn = document.getElementById("save-content-btn");
+    btn.disabled = true;
+    btn.textContent = "Saving…";
+    try {
+      const faqItems = [...cFaqListEl.querySelectorAll(".list-item")].map(r => ({
+        q: r.querySelector(".c-faq-q").value.trim(),
+        a: r.querySelector(".c-faq-a").value.trim()
+      })).filter(f => f.q);
+
+      await setDoc(doc(db, "siteContent", "about"), {
+        mongoliaIntro: document.getElementById("c-mongolia-intro").value.trim(),
+        companyStory: document.getElementById("c-company-story").value.trim()
+      }, { merge: true });
+
+      await setDoc(doc(db, "siteContent", "faq"), { items: faqItems }, { merge: true });
+
+      btn.textContent = "Saved ✓";
+    } catch (err) {
+      console.error(err);
+      btn.textContent = "Save failed";
+    } finally {
+      setTimeout(() => { btn.disabled = false; btn.textContent = "Save"; }, 1500);
+    }
   });
 </script>
 </body>

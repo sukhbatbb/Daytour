@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About — Mongol.Tours</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css?v=2">
 </head>
 <body>
 
@@ -34,15 +34,19 @@
 
 <section>
   <div class="wrap" style="max-width:720px;">
-    <p class="muted">[TO FILL — editorial section about Mongolia: nomadic heritage, the land, why it's worth visiting. Nat Geo-style tone.]</p>
+    <div id="mongolia-intro">
+      <div class="empty-state">Loading…</div>
+    </div>
   </div>
 </section>
 
-<section style="background:var(--sand-dim);">
+<section style="background:var(--paper-dim);">
   <div class="wrap" style="max-width:720px;">
     <div class="eyebrow">The company</div>
     <h2>About Mongol.Tours</h2>
-    <p class="muted">[TO FILL — company story, founding, team, guides.]</p>
+    <div id="company-story">
+      <div class="empty-state">Loading…</div>
+    </div>
   </div>
 </section>
 
@@ -54,6 +58,24 @@
   </div>
   <div class="wrap footer-bottom"><span>© <span id="year"></span> Mongol.Tours</span><span>Ulaanbaatar, Mongolia</span></div>
 </footer>
-<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+
+<script type="module">
+  import { getAboutContent } from "/assets/js/content-data.js";
+  import { escapeHtml } from "/assets/js/render.js";
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  const about = await getAboutContent();
+  const introEl = document.getElementById("mongolia-intro");
+  const storyEl = document.getElementById("company-story");
+
+  introEl.innerHTML = about?.mongoliaIntro
+    ? `<p>${escapeHtml(about.mongoliaIntro).replace(/\n/g, "</p><p>")}</p>`
+    : `<div class="empty-state">This section hasn't been written yet.</div>`;
+
+  storyEl.innerHTML = about?.companyStory
+    ? `<p>${escapeHtml(about.companyStory).replace(/\n/g, "</p><p>")}</p>`
+    : `<div class="empty-state">This section hasn't been written yet.</div>`;
+</script>
 </body>
 </html>

@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FAQ — Mongol.Tours</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css?v=2">
 </head>
 <body>
 
@@ -34,12 +34,7 @@
 
 <section>
   <div class="wrap" style="max-width:720px;">
-    <div class="faq-item"><div class="q">Do I need a visa for Mongolia?</div><p class="muted">[TO FILL — visa requirements by nationality]</p></div>
-    <div class="faq-item"><div class="q">What's the best time of year to visit?</div><p class="muted">[TO FILL — seasonal recommendations]</p></div>
-    <div class="faq-item"><div class="q">How fit do I need to be?</div><p class="muted">Each tour lists a difficulty rating (Easy, Moderate, Strenuous) and full fitness details on its own page.</p></div>
-    <div class="faq-item"><div class="q">How do I pay, and when?</div><p class="muted">[TO FILL — payment method, deposit, timing]</p></div>
-    <div class="faq-item"><div class="q">What should I pack?</div><p class="muted">Each tour's page lists a "What to Bring" section specific to that trip.</p></div>
-    <div class="faq-item"><div class="q">Can an itinerary be customized?</div><p class="muted">Day tours are booked as listed. Multi-day itineraries are fixed departures — for a custom version, <a href="/contact.html" style="text-decoration:underline;">contact us directly</a>.</p></div>
+    <div id="faq-list"><div class="empty-state">Loading…</div></div>
   </div>
 </section>
 
@@ -51,6 +46,22 @@
   </div>
   <div class="wrap footer-bottom"><span>© <span id="year"></span> Mongol.Tours</span><span>Ulaanbaatar, Mongolia</span></div>
 </footer>
-<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+
+<script type="module">
+  import { getFaqItems } from "/assets/js/content-data.js";
+  import { escapeHtml, emptyStateHTML } from "/assets/js/render.js";
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  const items = await getFaqItems();
+  const listEl = document.getElementById("faq-list");
+  listEl.innerHTML = items.length
+    ? items.map(f => `
+        <div class="faq-item">
+          <div class="q">${escapeHtml(f.q)}</div>
+          <p class="muted">${escapeHtml(f.a)}</p>
+        </div>`).join("")
+    : emptyStateHTML("FAQ hasn't been added yet — check back soon.");
+</script>
 </body>
 </html>

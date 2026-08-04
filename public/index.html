@@ -6,8 +6,8 @@
 <title>Mongol.Tours — Discover the Last Great Nomadic Civilization</title>
 <meta name="description" content="Small-group tours across Mongolia: Gobi Desert expeditions, Lake Khuvsgul horseback treks, the Golden Eagle Festival, and our own cultural destination, Mongol Culture Park.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css?v=2">
 </head>
 <body>
 
@@ -49,11 +49,11 @@
   </div>
 </section>
 
-<section style="background:var(--sky); color:var(--white);">
+<section style="background:var(--ink,#15161A); color:var(--white,#fff);">
   <div class="wrap" style="display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center;">
     <div>
-      <div class="eyebrow" style="color:var(--gold);">Our own destination</div>
-      <h2 style="color:var(--white);">Mongol Culture Park</h2>
+      <div class="eyebrow" style="color:#7FBB8E;">Our own destination</div>
+      <h2 style="color:var(--white,#fff);">Mongol Culture Park</h2>
       <p style="color:rgba(251,248,241,.78); max-width:44ch;">Inside Terelj National Park, 42km from Ulaanbaatar, we built a place dedicated to Mongolian nomadic heritage — live throat singing, traditional dance, and a restaurant serving countryside classics with a refined hand. Nearly every itinerary on this site passes through it, because it's the closest thing we have to a front door for the culture.</p>
       <a class="btn btn-ghost" style="margin-top:1rem;" href="/destinations.html#mongol-culture-park">Learn about the park</a>
     </div>
@@ -70,12 +70,12 @@
   </div>
 </section>
 
-<section style="background:var(--sand-dim);">
+<section style="background:var(--paper-dim);">
   <div class="wrap">
     <div class="eyebrow">Traveler notes</div>
     <h2>What people say</h2>
-    <div class="card-grid" style="margin-top:2rem;">
-      <div class="tour-card"><div class="body"><p class="muted">Traveler stories will appear here — this section is a placeholder until reviews come in.</p></div></div>
+    <div id="testimonials-grid" class="card-grid" style="margin-top:2rem;">
+      <div class="empty-state">Loading…</div>
     </div>
   </div>
 </section>
@@ -114,7 +114,8 @@
 
 <script type="module">
   import { listTours } from "/assets/js/tours-data.js";
-  import { tourCardHTML, emptyStateHTML } from "/assets/js/render.js";
+  import { listTestimonials } from "/assets/js/content-data.js";
+  import { tourCardHTML, emptyStateHTML, escapeHtml } from "/assets/js/render.js";
 
   document.getElementById("year").textContent = new Date().getFullYear();
 
@@ -124,6 +125,19 @@
   grid.innerHTML = featured.length
     ? featured.map(tourCardHTML).join("")
     : emptyStateHTML("No tours published yet — add some in /admin.");
+
+  const testimonialsGrid = document.getElementById("testimonials-grid");
+  const testimonials = await listTestimonials();
+  testimonialsGrid.innerHTML = testimonials.length
+    ? testimonials.map(t => `
+        <div class="tour-card">
+          <div class="body">
+            <p class="muted" style="font-style:italic;">"${escapeHtml(t.quote)}"</p>
+            <p style="font-weight:800; margin:0;">${escapeHtml(t.name)}</p>
+            ${t.trip ? `<p class="muted" style="font-size:.85rem; margin:0;">${escapeHtml(t.trip)}</p>` : ""}
+          </div>
+        </div>`).join("")
+    : emptyStateHTML("Traveler stories will appear here once reviews come in.");
 </script>
 </body>
 </html>
