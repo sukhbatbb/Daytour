@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="page-title">Tour — Mongol.Tours</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a class="brand" href="/index.html">Mongol<span>.</span>Tours</a>
+    <div class="nav-links">
+      <a href="/index.html">Home</a>
+      <a href="/tours.html" class="active">Tours</a>
+      <a href="/destinations.html">Destinations</a>
+      <a href="/about.html">About</a>
+      <a href="/faq.html">FAQ</a>
+      <a href="/contact.html">Contact</a>
+    </div>
+    <a class="btn btn-sm" href="/contact.html">Plan a trip</a>
+  </div>
+</nav>
+
+<div id="content">
+  <div class="empty-state" style="padding:120px 20px;">Loading tour…</div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <h4>Mongol.Tours</h4>
+      <p style="max-width:28ch; font-size:.88rem;">Small-group tours across Mongolia, anchored by Mongol Culture Park.</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <p><a href="/tours.html">Tours</a></p>
+      <p><a href="/destinations.html">Destinations</a></p>
+      <p><a href="/about.html">About</a></p>
+    </div>
+    <div>
+      <h4>Support</h4>
+      <p><a href="/faq.html">FAQ</a></p>
+      <p><a href="/contact.html">Contact</a></p>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <span>© <span id="year"></span> Mongol.Tours</span>
+    <span>Ulaanbaatar, Mongolia</span>
+  </div>
+</footer>
+
+<script type="module">
+  import { getTourBySlug } from "/assets/js/tours-data.js";
+  import { escapeHtml, formatPrice } from "/assets/js/render.js";
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  const params = new URLSearchParams(location.search);
+  const slug = params.get("slug");
+  const content = document.getElementById("content");
+
+  function section(title, bodyHtml) {
+    return `<div style="margin-bottom:2.6rem;"><h3>${title}</h3>${bodyHtml}</div>`;
+  }
+
+  function renderTour(t) {
+    document.getElementById("page-title").textContent = `${t.title} — Mongol.Tours`;
+    const isMulti = t.category === "multi";
+    const qf = t.quickFacts || {};
+
+    const heroImg = t.heroImage
+      ? `<img src="${escapeHtml(t.heroImage)}" alt="${escapeHtml(t.title)}" style="width:100%; height:100%; object-fit:cover; position:absolute; inset:0;">`
+      : "";
+
+    const quickFactsHTML = `
+      <div class="quickfacts">
+        <div><div class="k">Duration</div><div class="v">${escapeHtml(qf.duration || "—")}</div></div>
+        <div><div class="k">Difficulty</div><div class="v">${escapeHtml(qf.difficulty || "—")}</div></div>
+        <div><div class="k">Group size</div><div class="v">${escapeHtml(qf.groupSize || "—")}</div></div>
+        <div><div class="k">Location</div><div class="v">${escapeHtml(qf.location || "—")}</div></div>
+        ${qf.fixedDates ? `<div><div class="k">Fixed dates</div><div class="v">${escapeHtml(qf.fixedDates)}</div></div>` : ""}
+      </div>`;
+
+    const highlightsHTML = (t.highlights || []).length
+      ? section("Highlights", `<ul class="check-list">${t.highlights.map(h => `<li>${escapeHtml(h)}</li>`).join("")}</ul>`)
+      : "";
+
+    const routeHTML = (t.itinerary || []).length
+      ? section(isMulti ? "Itinerary" : "Schedule", `
+          <div class="route">
+            ${t.itinerary.map(s => `
+              <div class="route-step">
+                <div class="label">${escapeHtml(s.label)}</div>
+                ${s.detail ? `<div class="detail">${escapeHtml(s.detail)}</div>` : ""}
+              </div>`).join("")}
+          </div>`)
+      : "";
+
+    const includedHTML = section("What's Included", `<ul class="check-list">${(t.included || []).map(i => `<li>${escapeHtml(i)}</li>`).join("")}</ul>`);
+    const notIncludedHTML = section("Not Included", `<ul class="check-list x-list">${(t.notIncluded || []).map(i => `<li>${escapeHtml(i)}</li>`).join("")}</ul>`);
+
+    const goodForHTML = t.goodFor ? section("Good For", `<p>${escapeHtml(t.goodFor)}</p>`) : "";
+    const bringHTML = t.whatToBring ? section("What to Bring", `<p>${escapeHtml(t.whatToBring)}</p>`) : "";
+
+    const pricingHTML = isMulti && t.pricingTable?.length ? `
+      <div class="side-card" style="margin-top:24px;">
+        <h4>Pricing</h4>
+        <table class="pricing">
+          <thead><tr><th>Group size</th><th>Per person</th></tr></thead>
+          <tbody>
+            ${t.pricingTable.map(r => `<tr><td>${escapeHtml(r.groupSize)}</td><td>$${Number(r.price).toLocaleString("en-US")}</td></tr>`).join("")}
+          </tbody>
+        </table>
+        ${t.pricingNote ? `<p class="muted" style="font-size:.85rem; margin-top:1em;">${escapeHtml(t.pricingNote)}</p>` : ""}
+        ${t.fixedNotCustomizable ? `<p class="badge" style="margin-top:1em;">Fixed itinerary — not customizable</p><p class="muted" style="font-size:.85rem; margin-top:.6em;">Want changes? <a href="/contact.html" style="text-decoration:underline;">Email or message us directly.</a></p>` : ""}
+      </div>` : "";
+
+    const faqHTML = (t.faq || []).length ? `
+      <div style="margin-top:2.6rem;">
+        <h3>FAQ</h3>
+        ${t.faq.map(f => `
+          <div class="faq-item">
+            <div class="q">${escapeHtml(f.q)}</div>
+            <div class="muted">${escapeHtml(f.a)}</div>
+          </div>`).join("")}
+      </div>` : "";
+
+    content.innerHTML = `
+      <header class="hero" style="min-height:340px; display:flex; align-items:flex-end;">
+        ${heroImg}
+        <div class="wrap" style="position:relative; z-index:1; padding-top:0;">
+          <div class="eyebrow">${isMulti ? "Multi-Day Itinerary" : "Day Tour"}</div>
+          <h1 style="font-size:clamp(2rem,4vw,3rem);">${escapeHtml(t.title)}</h1>
+          <p class="lede" style="margin-bottom:0;">${escapeHtml(qf.duration || "")} · ${formatPrice(qf.priceFrom)}</p>
+        </div>
+      </header>
+      <section>
+        <div class="wrap">
+          <div style="margin-bottom:2.4rem;">${quickFactsHTML}</div>
+          <div class="detail-grid">
+            <div>
+              ${section("Overview", `<p>${escapeHtml(t.overview || "")}</p>`)}
+              ${highlightsHTML}
+              ${routeHTML}
+              ${includedHTML}
+              ${notIncludedHTML}
+              ${goodForHTML}
+              ${bringHTML}
+              ${t.meetingPoint ? section("Meeting Point", `<p>${escapeHtml(t.meetingPoint)}</p>`) : ""}
+              ${faqHTML}
+            </div>
+            <aside>
+              <div class="side-card">
+                <h4>Ready to go?</h4>
+                <p style="font-size:.92rem;">${formatPrice(qf.priceFrom)} per person</p>
+                <a class="btn btn-primary" style="width:100%; justify-content:center; margin-top:1em;" href="/contact.html?tour=${encodeURIComponent(t.slug)}">Enquire about this tour</a>
+              </div>
+              ${pricingHTML}
+            </aside>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  if (!slug) {
+    content.innerHTML = `<div class="empty-state" style="padding:120px 20px;">No tour specified.</div>`;
+  } else {
+    const tour = await getTourBySlug(slug);
+    if (!tour) {
+      content.innerHTML = `<div class="empty-state" style="padding:120px 20px;">Tour not found — it may be unpublished or the link is out of date.</div>`;
+    } else {
+      renderTour(tour);
+    }
+  }
+</script>
+</body>
+</html>

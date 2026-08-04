@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Destinations — Mongol.Tours</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a class="brand" href="/index.html">Mongol<span>.</span>Tours</a>
+    <div class="nav-links">
+      <a href="/index.html">Home</a>
+      <a href="/tours.html">Tours</a>
+      <a href="/destinations.html" class="active">Destinations</a>
+      <a href="/about.html">About</a>
+      <a href="/faq.html">FAQ</a>
+      <a href="/contact.html">Contact</a>
+    </div>
+    <a class="btn btn-sm" href="/contact.html">Plan a trip</a>
+  </div>
+</nav>
+
+<header class="hero" style="padding-top:70px; padding-bottom:56px;">
+  <div class="wrap">
+    <div class="eyebrow">Destinations</div>
+    <h1 style="font-size:clamp(2.2rem,4vw,3.2rem);">The places behind the itineraries</h1>
+    <p class="lede">Where our tours actually go, and which trips visit each one.</p>
+  </div>
+</header>
+
+<section id="mongol-culture-park">
+  <div class="wrap" style="display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center;">
+    <div style="aspect-ratio:4/3; background:linear-gradient(135deg,#2a3b4d,#16202e); border-radius:3px;"></div>
+    <div>
+      <div class="eyebrow">Our own destination</div>
+      <h2>Mongol Culture Park</h2>
+      <p class="muted">Inside Terelj National Park, ~42km from Ulaanbaatar. Built around Mongolian nomadic heritage: live throat singing and traditional dance, open grounds, and a restaurant serving countryside classics with a more refined presentation.</p>
+      <p><a class="btn btn-sm" href="/tours.html#day">See tours here</a></p>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--sand-dim);">
+  <div class="wrap">
+    <div class="eyebrow">Also on our routes</div>
+    <h2>Regions we cover</h2>
+    <div class="card-grid" style="margin-top:2rem;">
+      <div class="tour-card"><div class="body"><h3>Terelj National Park</h3><p class="muted" style="font-size:.9rem;">Home to Mongol Culture Park and the Bogd Khan foothills hikes.</p></div></div>
+      <div class="tour-card"><div class="body"><h3>Gobi Desert</h3><p class="muted" style="font-size:.9rem;">Singing dunes, Flaming Cliffs, and the Yolyn Am ice gorge.</p></div></div>
+      <div class="tour-card"><div class="body"><h3>Central Mongolia / Karakorum</h3><p class="muted" style="font-size:.9rem;">Hustai's wild horses and Erdene Zuu Monastery, Mongolia's ancient capital.</p></div></div>
+      <div class="tour-card"><div class="body"><h3>Lake Khuvsgul</h3><p class="muted" style="font-size:.9rem;">Mongolia's largest freshwater lake, reachable by horseback or by vehicle.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div><h4>Mongol.Tours</h4><p style="max-width:28ch; font-size:.88rem;">Small-group tours across Mongolia, anchored by Mongol Culture Park.</p></div>
+    <div><h4>Explore</h4><p><a href="/tours.html">Tours</a></p><p><a href="/destinations.html">Destinations</a></p><p><a href="/about.html">About</a></p></div>
+    <div><h4>Support</h4><p><a href="/faq.html">FAQ</a></p><p><a href="/contact.html">Contact</a></p></div>
+  </div>
+  <div class="wrap footer-bottom"><span>© <span id="year"></span> Mongol.Tours</span><span>Ulaanbaatar, Mongolia</span></div>
+</footer>
+<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

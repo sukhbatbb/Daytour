@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mongol.Tours — Discover the Last Great Nomadic Civilization</title>
+<meta name="description" content="Small-group tours across Mongolia: Gobi Desert expeditions, Lake Khuvsgul horseback treks, the Golden Eagle Festival, and our own cultural destination, Mongol Culture Park.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a class="brand" href="/index.html">Mongol<span>.</span>Tours</a>
+    <div class="nav-links">
+      <a href="/index.html" class="active">Home</a>
+      <a href="/tours.html">Tours</a>
+      <a href="/destinations.html">Destinations</a>
+      <a href="/about.html">About</a>
+      <a href="/faq.html">FAQ</a>
+      <a href="/contact.html">Contact</a>
+    </div>
+    <a class="btn btn-sm" href="/contact.html">Plan a trip</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Ulaanbaatar, Mongolia</div>
+    <h1>Discover the Last Great Nomadic Civilization</h1>
+    <p class="lede">Small-group journeys across the steppe, the Gobi, and Lake Khuvsgul — guided by people who grew up here, and anchored by Mongol Culture Park, our own home for Mongolian heritage.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="/tours.html">Browse tours</a>
+      <a class="btn btn-ghost" href="/tours.html#day">See day tours</a>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Featured</div>
+    <h2>Where to start</h2>
+    <p class="muted" style="max-width:56ch;">A mix of short introductions and full expeditions — pick your pace.</p>
+    <div id="featured-grid" class="card-grid" style="margin-top:2rem;">
+      <div class="empty-state">Loading tours…</div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--sky); color:var(--white);">
+  <div class="wrap" style="display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center;">
+    <div>
+      <div class="eyebrow" style="color:var(--gold);">Our own destination</div>
+      <h2 style="color:var(--white);">Mongol Culture Park</h2>
+      <p style="color:rgba(251,248,241,.78); max-width:44ch;">Inside Terelj National Park, 42km from Ulaanbaatar, we built a place dedicated to Mongolian nomadic heritage — live throat singing, traditional dance, and a restaurant serving countryside classics with a refined hand. Nearly every itinerary on this site passes through it, because it's the closest thing we have to a front door for the culture.</p>
+      <a class="btn btn-ghost" style="margin-top:1rem;" href="/destinations.html#mongol-culture-park">Learn about the park</a>
+    </div>
+    <div style="aspect-ratio:4/3; background:linear-gradient(135deg,#2a3b4d,#16202e); border-radius:3px; border:1px solid rgba(251,248,241,.12);"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap" style="max-width:760px;">
+    <div class="eyebrow">Why Mongolia</div>
+    <h2>A country still measured in horses and horizon</h2>
+    <p class="muted">Mongolia is one of the last places where nomadic life isn't a museum piece — it's Tuesday. We build small-group trips around that fact: real families, real distances, and a guide who knows which ridge to wait on for the light. Read more about the land, the culture, and how we run our trips.</p>
+    <a class="btn" href="/about.html">Our story</a>
+  </div>
+</section>
+
+<section style="background:var(--sand-dim);">
+  <div class="wrap">
+    <div class="eyebrow">Traveler notes</div>
+    <h2>What people say</h2>
+    <div class="card-grid" style="margin-top:2rem;">
+      <div class="tour-card"><div class="body"><p class="muted">Traveler stories will appear here — this section is a placeholder until reviews come in.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="center">
+  <div class="wrap">
+    <h2>Ready to see it for yourself?</h2>
+    <p class="muted" style="max-width:44ch; margin-left:auto; margin-right:auto;">Every itinerary here is a fixed departure with a real price — send us a message and we'll help you pick the right one.</p>
+    <a class="btn btn-primary" href="/tours.html">View all tours</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <h4>Mongol.Tours</h4>
+      <p style="max-width:28ch; font-size:.88rem;">Small-group tours across Mongolia, anchored by Mongol Culture Park.</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <p><a href="/tours.html">Tours</a></p>
+      <p><a href="/destinations.html">Destinations</a></p>
+      <p><a href="/about.html">About</a></p>
+    </div>
+    <div>
+      <h4>Support</h4>
+      <p><a href="/faq.html">FAQ</a></p>
+      <p><a href="/contact.html">Contact</a></p>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <span>© <span id="year"></span> Mongol.Tours</span>
+    <span>Ulaanbaatar, Mongolia</span>
+  </div>
+</footer>
+
+<script type="module">
+  import { listTours } from "/assets/js/tours-data.js";
+  import { tourCardHTML, emptyStateHTML } from "/assets/js/render.js";
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  const grid = document.getElementById("featured-grid");
+  const all = await listTours();
+  const featured = all.slice(0, 4);
+  grid.innerHTML = featured.length
+    ? featured.map(tourCardHTML).join("")
+    : emptyStateHTML("No tours published yet — add some in /admin.");
+</script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Mongol.Tours</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a class="brand" href="/index.html">Mongol<span>.</span>Tours</a>
+    <div class="nav-links">
+      <a href="/index.html">Home</a>
+      <a href="/tours.html">Tours</a>
+      <a href="/destinations.html">Destinations</a>
+      <a href="/about.html">About</a>
+      <a href="/faq.html">FAQ</a>
+      <a href="/contact.html" class="active">Contact</a>
+    </div>
+    <a class="btn btn-sm" href="/contact.html">Plan a trip</a>
+  </div>
+</nav>
+
+<header class="hero" style="padding-top:70px; padding-bottom:56px;">
+  <div class="wrap">
+    <div class="eyebrow">Contact</div>
+    <h1 style="font-size:clamp(2.2rem,4vw,3.2rem);">Let's plan your trip</h1>
+    <p class="lede">Tell us which tour you're interested in, or describe what you're after — we'll follow up by email.</p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap" style="max-width:640px;">
+    <form id="contact-form">
+      <div class="field">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div class="field">
+        <label for="tour">Tour (optional)</label>
+        <input type="text" id="tour" name="tour" placeholder="e.g. Gobi Desert & Karakorum Classic">
+      </div>
+      <div class="field">
+        <label for="dates">Preferred dates / group size (optional)</label>
+        <input type="text" id="dates" name="dates">
+      </div>
+      <div class="field">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" required></textarea>
+      </div>
+      <button class="btn btn-primary" type="submit" id="submit-btn">Send message</button>
+      <p id="form-status" class="muted" style="margin-top:1em;"></p>
+    </form>
+
+    <div style="margin-top:3rem; padding-top:2rem; border-top:1px solid var(--line);">
+      <h4 style="font-family:var(--font-mono); font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; opacity:.6;">Other ways to reach us</h4>
+      <p>Email: <a href="mailto:info@mongol.tours" style="text-decoration:underline;">info@mongol.tours</a> <span class="muted">[TO FILL: real address]</span></p>
+      <p>WhatsApp: <a href="#" style="text-decoration:underline;">[TO FILL: link]</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div><h4>Mongol.Tours</h4><p style="max-width:28ch; font-size:.88rem;">Small-group tours across Mongolia, anchored by Mongol Culture Park.</p></div>
+    <div><h4>Explore</h4><p><a href="/tours.html">Tours</a></p><p><a href="/destinations.html">Destinations</a></p><p><a href="/about.html">About</a></p></div>
+    <div><h4>Support</h4><p><a href="/faq.html">FAQ</a></p><p><a href="/contact.html">Contact</a></p></div>
+  </div>
+  <div class="wrap footer-bottom"><span>© <span id="year"></span> Mongol.Tours</span><span>Ulaanbaatar, Mongolia</span></div>
+</footer>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // Pre-fill tour field if arriving from a tour page (?tour=slug)
+  const params = new URLSearchParams(location.search);
+  if (params.get("tour")) {
+    document.getElementById("tour").value = params.get("tour").replace(/-/g, " ");
+  }
+
+  const form = document.getElementById("contact-form");
+  const status = document.getElementById("form-status");
+  const btn = document.getElementById("submit-btn");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    btn.disabled = true;
+    btn.textContent = "Sending…";
+    status.textContent = "";
+
+    const data = Object.fromEntries(new FormData(form).entries());
+    try {
+      const res = await fetch("/.netlify/functions/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      if (!res.ok) throw new Error("Request failed");
+      form.reset();
+      status.textContent = "Message sent — we'll get back to you by email soon.";
+    } catch (err) {
+      status.textContent = "Something went wrong sending your message — please email us directly instead.";
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Send message";
+    }
+  });
+</script>
+</body>
+</html>

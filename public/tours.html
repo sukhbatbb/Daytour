@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tours — Mongol.Tours</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a class="brand" href="/index.html">Mongol<span>.</span>Tours</a>
+    <div class="nav-links">
+      <a href="/index.html">Home</a>
+      <a href="/tours.html" class="active">Tours</a>
+      <a href="/destinations.html">Destinations</a>
+      <a href="/about.html">About</a>
+      <a href="/faq.html">FAQ</a>
+      <a href="/contact.html">Contact</a>
+    </div>
+    <a class="btn btn-sm" href="/contact.html">Plan a trip</a>
+  </div>
+</nav>
+
+<header class="hero" style="padding-top:70px; padding-bottom:56px;">
+  <div class="wrap">
+    <div class="eyebrow">Tours</div>
+    <h1 style="font-size:clamp(2.2rem,4vw,3.2rem);">From a half-day to two weeks</h1>
+    <p class="lede">Four day tours built around Mongol Culture Park, and six fixed multi-day itineraries covering the Gobi, Central Mongolia, and Lake Khuvsgul.</p>
+  </div>
+</header>
+
+<section style="padding-top:48px;">
+  <div class="wrap">
+    <div class="tour-tabs">
+      <button data-tab="day" class="active" id="tab-day">Day Tours</button>
+      <button data-tab="multi" id="tab-multi">Multi-Day Itineraries</button>
+    </div>
+    <div id="grid" class="card-grid">
+      <div class="empty-state">Loading tours…</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <h4>Mongol.Tours</h4>
+      <p style="max-width:28ch; font-size:.88rem;">Small-group tours across Mongolia, anchored by Mongol Culture Park.</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <p><a href="/tours.html">Tours</a></p>
+      <p><a href="/destinations.html">Destinations</a></p>
+      <p><a href="/about.html">About</a></p>
+    </div>
+    <div>
+      <h4>Support</h4>
+      <p><a href="/faq.html">FAQ</a></p>
+      <p><a href="/contact.html">Contact</a></p>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <span>© <span id="year"></span> Mongol.Tours</span>
+    <span>Ulaanbaatar, Mongolia</span>
+  </div>
+</footer>
+
+<script type="module">
+  import { listTours } from "/assets/js/tours-data.js";
+  import { tourCardHTML, emptyStateHTML } from "/assets/js/render.js";
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  const grid = document.getElementById("grid");
+  const tabs = document.querySelectorAll(".tour-tabs button");
+  let cache = { day: null, multi: null };
+
+  async function render(category) {
+    grid.innerHTML = `<div class="empty-state">Loading tours…</div>`;
+    if (!cache[category]) cache[category] = await listTours({ category });
+    const tours = cache[category];
+    grid.innerHTML = tours.length
+      ? tours.map(tourCardHTML).join("")
+      : emptyStateHTML("No tours published in this category yet.");
+  }
+
+  tabs.forEach(btn => {
+    btn.addEventListener("click", () => {
+      tabs.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      render(btn.dataset.tab);
+      history.replaceState(null, "", "#" + btn.dataset.tab);
+    });
+  });
+
+  const initial = location.hash === "#multi" ? "multi" : "day";
+  document.getElementById(initial === "multi" ? "tab-multi" : "tab-day").classList.add("active");
+  document.getElementById(initial === "multi" ? "tab-day" : "tab-multi").classList.remove("active");
+  render(initial);
+</script>
+</body>
+</html>

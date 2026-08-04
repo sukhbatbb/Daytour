@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Mongol.Tours</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<meta name="robots" content="noindex, nofollow">
+<style>
+  body{ background:var(--sand); }
+  .admin-nav{ background:var(--sky); color:var(--white); padding:16px 0; }
+  .admin-nav .wrap{ display:flex; justify-content:space-between; align-items:center; }
+  .admin-nav a{ color:var(--white); }
+  #login-screen{ max-width:380px; margin:120px auto; }
+  .tour-row{
+    display:flex; justify-content:space-between; align-items:center; gap:1rem;
+    background:var(--white); border:1px solid var(--line); border-radius:var(--radius);
+    padding:16px 20px; margin-bottom:12px;
+  }
+  .tour-row .meta{ font-family:var(--font-mono); font-size:.72rem; opacity:.6; margin-top:.3em; }
+  .tour-row .actions{ display:flex; gap:.5rem; flex-shrink:0; }
+  .pill{ font-family:var(--font-mono); font-size:.66rem; text-transform:uppercase; padding:.25em .6em; border-radius:2px; }
+  .pill.pub{ background:#DDEBD9; color:#2F5C36; }
+  .pill.draft{ background:#EFE3D0; color:#8A6A2E; }
+  #editor{ display:none; }
+  .editor-section{ background:var(--white); border:1px solid var(--line); border-radius:var(--radius); padding:24px; margin-bottom:20px; }
+  .editor-section h4{ font-family:var(--font-mono); font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; opacity:.6; margin-bottom:1.2em; }
+  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+  .list-editor .list-item{ display:flex; gap:.5rem; margin-bottom:.5rem; }
+  .list-editor .list-item input,.list-editor .list-item textarea{ flex:1; }
+  .list-editor button.remove{ flex-shrink:0; }
+  .subtle-btn{ background:none; border:none; cursor:pointer; font-family:var(--font-mono); font-size:.72rem; text-decoration:underline; color:var(--azure); padding:0; }
+</style>
+</head>
+<body>
+
+<nav class="admin-nav">
+  <div class="wrap">
+    <strong>Mongol.Tours — Admin</strong>
+    <div id="who" style="display:flex; gap:1rem; align-items:center; font-size:.85rem;"></div>
+  </div>
+</nav>
+
+<div id="login-screen">
+  <h2 style="margin-top:2rem;">Sign in</h2>
+  <div class="field"><label>Email</label><input type="email" id="login-email"></div>
+  <div class="field"><label>Password</label><input type="password" id="login-password"></div>
+  <button class="btn btn-primary" id="login-btn">Sign in</button>
+  <p id="login-error" class="muted" style="color:#8a3324;"></p>
+</div>
+
+<div id="app" style="display:none;">
+  <section style="padding-top:32px;">
+    <div class="wrap">
+
+      <div id="list-view">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.6rem;">
+          <h2 style="margin:0;">Tours</h2>
+          <button class="btn btn-primary" id="new-tour-btn">+ New tour</button>
+        </div>
+        <div class="tour-tabs">
+          <button data-cat="day" class="active" id="admin-tab-day">Day Tours</button>
+          <button data-cat="multi" id="admin-tab-multi">Multi-Day</button>
+        </div>
+        <div id="tour-list"><div class="empty-state">Loading…</div></div>
+      </div>
+
+      <div id="editor">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.6rem;">
+          <button class="subtle-btn" id="back-btn">← Back to list</button>
+          <div style="display:flex; gap:.6rem;">
+            <button class="btn btn-danger btn-sm" id="delete-btn" style="display:none;">Delete</button>
+            <button class="btn btn-sm" id="save-draft-btn">Save as draft</button>
+            <button class="btn btn-primary btn-sm" id="save-publish-btn">Save & publish</button>
+          </div>
+        </div>
+
+        <div class="editor-section">
+          <h4>Basics</h4>
+          <div class="field"><label>Title</label><input id="f-title"></div>
+          <div class="row2">
+            <div class="field"><label>Slug (URL)</label><input id="f-slug" placeholder="e.g. gobi-karakorum-classic"></div>
+            <div class="field"><label>Category</label>
+              <select id="f-category"><option value="day">Day Tour</option><option value="multi">Multi-Day</option></select>
+            </div>
+          </div>
+          <div class="field"><label>Hero image URL (GitHub-hosted)</label><input id="f-heroimage" placeholder="https://raw.githubusercontent.com/..."></div>
+        </div>
+
+        <div class="editor-section">
+          <h4>Quick Facts</h4>
+          <div class="row2">
+            <div class="field"><label>Duration</label><input id="f-duration"></div>
+            <div class="field"><label>Difficulty</label><input id="f-difficulty"></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Group size</label><input id="f-groupsize"></div>
+            <div class="field"><label>Price from (USD, number)</label><input id="f-price" type="number"></div>
+          </div>
+          <div class="field"><label>Location</label><input id="f-location"></div>
+          <div class="field"><label>Fixed dates (optional, e.g. "around Naadam")</label><input id="f-fixeddates"></div>
+        </div>
+
+        <div class="editor-section">
+          <h4>Overview</h4>
+          <div class="field"><textarea id="f-overview" style="min-height:140px;"></textarea></div>
+        </div>
+
+        <div class="editor-section">
+          <h4>Highlights (one per line)</h4>
+          <div class="field"><textarea id="f-highlights" style="min-height:110px;"></textarea></div>
+        </div>
+
+        <div class="editor-section">
+          <h4>Itinerary / Schedule</h4>
+          <div id="itinerary-list" class="list-editor"></div>
+          <button class="subtle-btn" id="add-itinerary-step">+ Add step</button>
+        </div>
+
+        <div class="editor-section">
+          <h4>What's Included (one per line)</h4>
+          <div class="field"><textarea id="f-included" style="min-height:90px;"></textarea></div>
+        </div>
+
+        <div class="editor-section">
+          <h4>Not Included (one per line)</h4>
+          <div class="field"><textarea id="f-notincluded" style="min-height:90px;"></textarea></div>
+        </div>
+
+        <div class="editor-section">
+          <h4>Good For</h4>
+          <div class="field"><textarea id="f-goodfor"></textarea></div>
+        </div>
+
+        <div class="editor-section">
+          <h4>What to Bring</h4>
+          <div class="field"><textarea id="f-bring"></textarea></div>
+        </div>
+
+        <div class="editor-section">
+          <h4>Meeting Point</h4>
+          <div class="field"><input id="f-meetingpoint"></div>
+        </div>
+
+        <div class="editor-section" id="pricing-section">
+          <h4>Pricing table (Multi-Day only)</h4>
+          <div id="pricing-list" class="list-editor"></div>
+          <button class="subtle-btn" id="add-pricing-row">+ Add price tier</button>
+          <div class="field" style="margin-top:1rem;"><label>Pricing note (optional)</label><input id="f-pricingnote"></div>
+          <div class="field" style="margin-top:.5rem;">
+            <label style="display:flex; align-items:center; gap:.5em; text-transform:none;"><input type="checkbox" id="f-fixed" style="width:auto;"> Fixed itinerary — not customizable</label>
+          </div>
+        </div>
+
+        <div class="editor-section">
+          <h4>FAQ</h4>
+          <div id="faq-list" class="list-editor"></div>
+          <button class="subtle-btn" id="add-faq-item">+ Add question</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</div>
+
+<script type="module">
+  import { auth, db, signInWithEmailAndPassword, onAuthStateChanged, signOut,
+           collection, doc, getDocs, addDoc, setDoc, deleteDoc, query, where }
+    from "/assets/js/firebase-init.js";
+
+  const loginScreen = document.getElementById("login-screen");
+  const appEl = document.getElementById("app");
+  const who = document.getElementById("who");
+
+  document.getElementById("login-btn").addEventListener("click", async () => {
+    const email = document.getElementById("login-email").value;
+    const password = document.getElementById("login-password").value;
+    const errEl = document.getElementById("login-error");
+    errEl.textContent = "";
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (err) {
+      errEl.textContent = "Sign-in failed — check email/password.";
+    }
+  });
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      loginScreen.style.display = "none";
+      appEl.style.display = "block";
+      who.innerHTML = `<span>${user.email}</span><button class="btn btn-ghost btn-sm" id="signout-btn">Sign out</button>`;
+      document.getElementById("signout-btn").addEventListener("click", () => signOut(auth));
+      loadList(currentCat);
+    } else {
+      loginScreen.style.display = "block";
+      appEl.style.display = "none";
+      who.innerHTML = "";
+    }
+  });
+
+  // ---------------- List view ----------------
+  const listView = document.getElementById("list-view");
+  const editorView = document.getElementById("editor");
+  const tourListEl = document.getElementById("tour-list");
+  let currentCat = "day";
+  let currentTours = [];
+
+  document.getElementById("admin-tab-day").addEventListener("click", () => switchTab("day"));
+  document.getElementById("admin-tab-multi").addEventListener("click", () => switchTab("multi"));
+  function switchTab(cat) {
+    currentCat = cat;
+    document.getElementById("admin-tab-day").classList.toggle("active", cat === "day");
+    document.getElementById("admin-tab-multi").classList.toggle("active", cat === "multi");
+    loadList(cat);
+  }
+
+  async function loadList(cat) {
+    tourListEl.innerHTML = `<div class="empty-state">Loading…</div>`;
+    const snap = await getDocs(query(collection(db, "tours"), where("category", "==", cat)));
+    currentTours = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => (a.order??99)-(b.order??99));
+    if (!currentTours.length) {
+      tourListEl.innerHTML = `<div class="empty-state">No tours in this category yet.</div>`;
+      return;
+    }
+    tourListEl.innerHTML = currentTours.map(t => `
+      <div class="tour-row">
+        <div>
+          <strong>${t.title || "(untitled)"}</strong>
+          <span class="pill ${t.published ? "pub" : "draft"}">${t.published ? "Published" : "Draft"}</span>
+          <div class="meta">/${t.slug || ""}</div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-sm" data-edit="${t.id}">Edit</button>
+        </div>
+      </div>
+    `).join("");
+    tourListEl.querySelectorAll("[data-edit]").forEach(btn => {
+      btn.addEventListener("click", () => openEditor(btn.dataset.edit));
+    });
+  }
+
+  document.getElementById("new-tour-btn").addEventListener("click", () => openEditor(null));
+  document.getElementById("back-btn").addEventListener("click", () => {
+    editorView.style.display = "none";
+    listView.style.display = "block";
+    loadList(currentCat);
+  });
+
+  // ---------------- Editor ----------------
+  let editingId = null;
+
+  function openEditor(id) {
+    editingId = id;
+    listView.style.display = "none";
+    editorView.style.display = "block";
+    document.getElementById("delete-btn").style.display = id ? "inline-flex" : "none";
+
+    const t = id ? currentTours.find(x => x.id === id) : {};
+    const qf = t.quickFacts || {};
+
+    document.getElementById("f-title").value = t.title || "";
+    document.getElementById("f-slug").value = t.slug || "";
+    document.getElementById("f-category").value = t.category || currentCat;
+    document.getElementById("f-heroimage").value = t.heroImage || "";
+    document.getElementById("f-duration").value = qf.duration || "";
+    document.getElementById("f-difficulty").value = qf.difficulty || "";
+    document.getElementById("f-groupsize").value = qf.groupSize || "";
+    document.getElementById("f-price").value = qf.priceFrom ?? "";
+    document.getElementById("f-location").value = qf.location || "";
+    document.getElementById("f-fixeddates").value = qf.fixedDates || "";
+    document.getElementById("f-overview").value = t.overview || "";
+    document.getElementById("f-highlights").value = (t.highlights || []).join("\n");
+    document.getElementById("f-included").value = (t.included || []).join("\n");
+    document.getElementById("f-notincluded").value = (t.notIncluded || []).join("\n");
+    document.getElementById("f-goodfor").value = t.goodFor || "";
+    document.getElementById("f-bring").value = t.whatToBring || "";
+    document.getElementById("f-meetingpoint").value = t.meetingPoint || "";
+    document.getElementById("f-pricingnote").value = t.pricingNote || "";
+    document.getElementById("f-fixed").checked = !!t.fixedNotCustomizable;
+
+    renderItinerary(t.itinerary || []);
+    renderPricing(t.pricingTable || []);
+    renderFaq(t.faq || []);
+  }
+
+  // Itinerary steps
+  const itineraryList = document.getElementById("itinerary-list");
+  function renderItinerary(steps) {
+    itineraryList.innerHTML = "";
+    steps.forEach(s => addItineraryRow(s.label, s.detail));
+    if (!steps.length) addItineraryRow("", "");
+  }
+  function addItineraryRow(label = "", detail = "") {
+    const row = document.createElement("div");
+    row.className = "list-item";
+    row.innerHTML = `
+      <input placeholder="Label (e.g. Day 1)" class="step-label" value="${label.replace(/"/g,"&quot;")}">
+      <input placeholder="Detail" class="step-detail" value="${detail.replace(/"/g,"&quot;")}">
+      <button class="btn btn-sm remove" type="button">✕</button>
+    `;
+    row.querySelector(".remove").addEventListener("click", () => row.remove());
+    itineraryList.appendChild(row);
+  }
+  document.getElementById("add-itinerary-step").addEventListener("click", () => addItineraryRow());
+
+  // Pricing rows
+  const pricingList = document.getElementById("pricing-list");
+  function renderPricing(rows) {
+    pricingList.innerHTML = "";
+    rows.forEach(r => addPricingRow(r.groupSize, r.price));
+  }
+  function addPricingRow(groupSize = "", price = "") {
+    const row = document.createElement("div");
+    row.className = "list-item";
+    row.innerHTML = `
+      <input placeholder="Group size (e.g. 2 pax)" class="price-group" value="${String(groupSize).replace(/"/g,"&quot;")}">
+      <input placeholder="Price per person (USD)" type="number" class="price-amount" value="${price}">
+      <button class="btn btn-sm remove" type="button">✕</button>
+    `;
+    row.querySelector(".remove").addEventListener("click", () => row.remove());
+    pricingList.appendChild(row);
+  }
+  document.getElementById("add-pricing-row").addEventListener("click", () => addPricingRow());
+
+  // FAQ
+  const faqList = document.getElementById("faq-list");
+  function renderFaq(items) {
+    faqList.innerHTML = "";
+    items.forEach(f => addFaqRow(f.q, f.a));
+    if (!items.length) addFaqRow("", "");
+  }
+  function addFaqRow(q = "", a = "") {
+    const row = document.createElement("div");
+    row.className = "list-item";
+    row.innerHTML = `
+      <input placeholder="Question" class="faq-q" value="${q.replace(/"/g,"&quot;")}">
+      <textarea placeholder="Answer" class="faq-a" style="min-height:44px;">${a}</textarea>
+      <button class="btn btn-sm remove" type="button">✕</button>
+    `;
+    row.querySelector(".remove").addEventListener("click", () => row.remove());
+    faqList.appendChild(row);
+  }
+  document.getElementById("add-faq-item").addEventListener("click", () => addFaqRow());
+
+  function collectForm() {
+    const linesOf = (id) => document.getElementById(id).value.split("\n").map(s => s.trim()).filter(Boolean);
+    const itinerary = [...itineraryList.querySelectorAll(".list-item")].map(r => ({
+      label: r.querySelector(".step-label").value.trim(),
+      detail: r.querySelector(".step-detail").value.trim()
+    })).filter(s => s.label);
+    const pricingTable = [...pricingList.querySelectorAll(".list-item")].map(r => ({
+      groupSize: r.querySelector(".price-group").value.trim(),
+      price: Number(r.querySelector(".price-amount").value) || 0
+    })).filter(p => p.groupSize);
+    const faq = [...faqList.querySelectorAll(".list-item")].map(r => ({
+      q: r.querySelector(".faq-q").value.trim(),
+      a: r.querySelector(".faq-a").value.trim()
+    })).filter(f => f.q);
+
+    return {
+      title: document.getElementById("f-title").value.trim(),
+      slug: document.getElementById("f-slug").value.trim(),
+      category: document.getElementById("f-category").value,
+      heroImage: document.getElementById("f-heroimage").value.trim(),
+      quickFacts: {
+        duration: document.getElementById("f-duration").value.trim(),
+        difficulty: document.getElementById("f-difficulty").value.trim(),
+        groupSize: document.getElementById("f-groupsize").value.trim(),
+        priceFrom: document.getElementById("f-price").value ? Number(document.getElementById("f-price").value) : null,
+        location: document.getElementById("f-location").value.trim(),
+        fixedDates: document.getElementById("f-fixeddates").value.trim() || null
+      },
+      overview: document.getElementById("f-overview").value.trim(),
+      highlights: linesOf("f-highlights"),
+      itinerary,
+      included: linesOf("f-included"),
+      notIncluded: linesOf("f-notincluded"),
+      goodFor: document.getElementById("f-goodfor").value.trim(),
+      whatToBring: document.getElementById("f-bring").value.trim(),
+      meetingPoint: document.getElementById("f-meetingpoint").value.trim(),
+      pricingTable,
+      pricingNote: document.getElementById("f-pricingnote").value.trim() || null,
+      fixedNotCustomizable: document.getElementById("f-fixed").checked
+    };
+  }
+
+  async function saveTour(publish) {
+    const data = collectForm();
+    if (!data.title || !data.slug) {
+      alert("Title and slug are required.");
+      return;
+    }
+    data.published = publish;
+    data.order = editingId
+      ? (currentTours.find(x => x.id === editingId)?.order ?? 99)
+      : (currentTours.length + 1);
+
+    if (editingId) {
+      await setDoc(doc(db, "tours", editingId), data, { merge: true });
+    } else {
+      await addDoc(collection(db, "tours"), data);
+    }
+    editorView.style.display = "none";
+    listView.style.display = "block";
+    switchTab(data.category);
+  }
+
+  document.getElementById("save-draft-btn").addEventListener("click", () => saveTour(false));
+  document.getElementById("save-publish-btn").addEventListener("click", () => saveTour(true));
+  document.getElementById("delete-btn").addEventListener("click", async () => {
+    if (!editingId) return;
+    if (!confirm("Delete this tour permanently?")) return;
+    await deleteDoc(doc(db, "tours", editingId));
+    editorView.style.display = "none";
+    listView.style.display = "block";
+    loadList(currentCat);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,562 @@
+[
+  {
+    "slug": "mcp-half-day",
+    "category": "day",
+    "order": 1,
+    "published": true,
+    "title": "Mongol Culture Park Half-Day Experience",
+    "heroImage": "",
+    "gallery": [],
+    "quickFacts": {
+      "duration": "Half-day, 4–5 hours",
+      "difficulty": "Easy",
+      "groupSize": "Small groups, 2–8",
+      "priceFrom": null,
+      "location": "Mongol Culture Park, Terelj National Park (~42km from Ulaanbaatar)"
+    },
+    "overview": "Mongol Culture Park is our own destination inside Terelj National Park, built around Mongolian nomadic heritage. This half-day visit is the introduction: a live cultural performance featuring throat singing and traditional dance, set against the park's backdrop, with time on either side to walk the grounds. It's the shortest way to get a genuine cultural experience without giving up most of your day to driving.",
+    "highlights": [
+      "Live throat singing and traditional dance performance",
+      "Time to explore Mongol Culture Park's grounds",
+      "Round-trip transport from Ulaanbaatar, no overnight needed",
+      "Small-group setting, not a large tour-bus crowd"
+    ],
+    "itinerary": [
+      { "label": "Depart Ulaanbaatar", "detail": "pickup from your hotel" },
+      { "label": "Drive to Terelj", "detail": "approx. [TO FILL] minutes" },
+      { "label": "Arrive at Mongol Culture Park", "detail": "orientation and time to explore" },
+      { "label": "Cultural performance", "detail": "throat singing and dance" },
+      { "label": "Free time on the grounds", "detail": "" },
+      { "label": "Return drive to Ulaanbaatar", "detail": "" }
+    ],
+    "included": ["Professional guide", "Round-trip transport", "Park entrance fee", "Performance ticket"],
+    "notIncluded": [
+      "Meals (this tour doesn't include the restaurant — see the Full-Day Experience if you want that)",
+      "Personal expenses and gratuities",
+      "Travel insurance"
+    ],
+    "goodFor": "Travelers who want an authentic cultural experience without a long day of driving or hiking — a strong option for a first or last day in Mongolia, or as an add-on to a longer stay.",
+    "whatToBring": "Comfortable walking shoes, weather-appropriate layers, camera.",
+    "meetingPoint": "Hotel pickup in Ulaanbaatar. [TO FILL: exact pickup time/window]",
+    "pricingTable": null,
+    "faq": [
+      { "q": "Is this tour suitable for children or older travelers?", "a": "[TO FILL — depends on how much walking the park grounds actually require]" },
+      { "q": "Can this be combined with other activities that day?", "a": "Yes — see the Mongol Culture Park & Bogd Khan Foothills Hike for a version that adds a hike beforehand." },
+      { "q": "What language is the performance in?", "a": "[TO FILL]" }
+    ]
+  },
+  {
+    "slug": "mcp-full-day",
+    "category": "day",
+    "order": 2,
+    "published": true,
+    "title": "Mongol Culture Park Full-Day Experience",
+    "heroImage": "",
+    "gallery": [],
+    "quickFacts": {
+      "duration": "Full-day, 7–8 hours",
+      "difficulty": "Easy",
+      "groupSize": "Small groups, 2–8",
+      "priceFrom": null,
+      "location": "Mongol Culture Park, Terelj National Park (~42km from Ulaanbaatar)"
+    },
+    "overview": "The unhurried version of the Mongol Culture Park visit. Same cultural performance program as the half-day, but with more time on the grounds and a sit-down meal at the park's restaurant — Mongolian dishes built around comfort-food staples like lamb shank and bone marrow, plated with a more refined presentation than the classic countryside spread. This is the tour for travelers who'd rather go deep on one place for a full day than cover distance between several.",
+    "highlights": [
+      "Full cultural performance program — throat singing and traditional dance",
+      "Sit-down meal at the Mongol Culture Park restaurant",
+      "Extended time to explore the grounds",
+      "Round-trip transport, no overnight needed"
+    ],
+    "itinerary": [
+      { "label": "Depart Ulaanbaatar", "detail": "pickup from your hotel" },
+      { "label": "Drive to Terelj", "detail": "approx. [TO FILL] minutes" },
+      { "label": "Arrive at Mongol Culture Park", "detail": "orientation and grounds exploration" },
+      { "label": "Cultural performance", "detail": "" },
+      { "label": "Lunch/dinner at the park restaurant", "detail": "[TO FILL: which meal, timing]" },
+      { "label": "Additional free time on the grounds", "detail": "" },
+      { "label": "Return drive to Ulaanbaatar", "detail": "" }
+    ],
+    "included": ["Professional guide", "Round-trip transport", "Park entrance fee", "Performance ticket", "Meal at the park restaurant"],
+    "notIncluded": [
+      "Alcoholic beverages [TO FILL — confirm if restaurant serves alcohol]",
+      "Personal expenses and gratuities",
+      "Travel insurance"
+    ],
+    "goodFor": "Travelers prioritizing culture and food over physical activity. A strong first- or last-day option, or for anyone who wants a relaxed, low-effort day between more active ones.",
+    "whatToBring": "Comfortable clothing, camera, appetite.",
+    "meetingPoint": "Hotel pickup in Ulaanbaatar. [TO FILL: exact pickup time/window]",
+    "pricingTable": null,
+    "faq": [
+      { "q": "Can dietary restrictions be accommodated at the restaurant?", "a": "[TO FILL]" },
+      { "q": "Is alcohol available with the meal?", "a": "[TO FILL]" },
+      { "q": "How does this differ from the Half-Day Experience?", "a": "This version adds the sit-down restaurant meal and more time on the grounds — the performance itself is the same." }
+    ]
+  },
+  {
+    "slug": "mcp-bogd-khan-foothills-hike",
+    "category": "day",
+    "order": 3,
+    "published": true,
+    "title": "Mongol Culture Park & Bogd Khan Foothills Hike",
+    "heroImage": "",
+    "gallery": [],
+    "quickFacts": {
+      "duration": "Half-day, 5–6 hours",
+      "difficulty": "Moderate",
+      "groupSize": "Small groups, 2–8",
+      "priceFrom": null,
+      "location": "Bogd Khan Mountain foothills, then Mongol Culture Park, Terelj National Park"
+    },
+    "overview": "A hike into the pine-covered lower slopes of Bogd Khan Mountain — one of the oldest legally protected natural areas in the world — followed by a cultural performance at Mongol Culture Park. Built for travelers who want to move first and sit down for culture second, in one afternoon rather than splitting it across two separate half-days.",
+    "highlights": [
+      "Guided hike into the Bogd Khan foothills",
+      "Live cultural performance at Mongol Culture Park",
+      "Combines an active start with a cultural finish",
+      "Round-trip transport, no overnight needed"
+    ],
+    "itinerary": [
+      { "label": "Depart Ulaanbaatar", "detail": "pickup from your hotel" },
+      { "label": "Drive to Bogd Khan trailhead", "detail": "approx. [TO FILL] minutes" },
+      { "label": "Guided hike", "detail": "approx. [TO FILL] hours, moderate terrain" },
+      { "label": "Drive to Mongol Culture Park", "detail": "approx. [TO FILL] minutes" },
+      { "label": "Cultural performance", "detail": "" },
+      { "label": "Return drive to Ulaanbaatar", "detail": "" }
+    ],
+    "included": ["Professional guide", "Round-trip transport", "Park entrance fee", "Performance ticket", "Water and snacks"],
+    "notIncluded": [
+      "Meals beyond snacks",
+      "Personal expenses and gratuities",
+      "Travel insurance",
+      "Hiking gear (see What to Bring)"
+    ],
+    "goodFor": "Active travelers who still want the cultural program, without giving up a full day to either half on its own.",
+    "whatToBring": "Sturdy walking/hiking shoes, layered clothing, water bottle, sun protection.",
+    "meetingPoint": "Hotel pickup in Ulaanbaatar. [TO FILL: exact pickup time/window]",
+    "pricingTable": null,
+    "faq": [
+      { "q": "How difficult is the hike portion?", "a": "Moderate — real elevation gain on the lower slopes of Bogd Khan, but not the full summit route. [TO FILL: confirm exact distance/elevation once route is fixed]" },
+      { "q": "Is there time pressure between the hike and the performance?", "a": "[TO FILL — worth confirming once real drive times and show schedules are known; this is the tightest-timed tour in the day-tour lineup]" },
+      { "q": "Can the hike and the cultural visit be booked separately?", "a": "Yes — the hike alone isn't currently a standalone listing, but the Half-Day and Full-Day MCP Experiences can be booked without the hike." }
+    ]
+  },
+  {
+    "slug": "bogd-khan-summit-hike",
+    "category": "day",
+    "order": 4,
+    "published": true,
+    "title": "Bogd Khan Summit Hike",
+    "heroImage": "",
+    "gallery": [],
+    "quickFacts": {
+      "duration": "Full-day, 9–10 hours",
+      "difficulty": "Strenuous",
+      "groupSize": "Small groups, 2–6",
+      "priceFrom": null,
+      "location": "Bogd Khan Mountain, near Ulaanbaatar"
+    },
+    "overview": "A full switchback climb through forest and scree to the summit ridge of Bogd Khan Mountain, with a real workout in the elevation gain and a payoff view over Ulaanbaatar and the Tuul River valley. Built for travelers who specifically want a mountain day, not a stroll — no Mongol Culture Park stop on this one; it's a standalone hiking day for the more serious end of the \"fit groups\" audience.",
+    "highlights": [
+      "Full summit climb, not just the foothills",
+      "Panoramic views over Ulaanbaatar and the Tuul River valley",
+      "A genuine physical challenge, guided throughout",
+      "Round-trip transport, no overnight needed"
+    ],
+    "itinerary": [
+      { "label": "Early depart Ulaanbaatar", "detail": "pickup from your hotel" },
+      { "label": "Drive to trailhead", "detail": "approx. [TO FILL] minutes" },
+      { "label": "Summit climb", "detail": "approx. [TO FILL] hours up" },
+      { "label": "Summit time", "detail": "rest, views, packed lunch" },
+      { "label": "Descent", "detail": "approx. [TO FILL] hours down" },
+      { "label": "Return drive to Ulaanbaatar", "detail": "" }
+    ],
+    "included": ["Professional guide", "Round-trip transport", "Packed lunch"],
+    "notIncluded": [
+      "Hiking gear (see What to Bring)",
+      "Personal expenses and gratuities",
+      "Travel insurance"
+    ],
+    "goodFor": "Experienced hikers, groups training for something bigger, or anyone who wants their one big physical day in Mongolia to actually be big.",
+    "whatToBring": "Proper hiking boots, layered clothing, rain shell, sufficient water, trekking poles if you use them, sun protection.",
+    "meetingPoint": "Early hotel pickup in Ulaanbaatar. [TO FILL: exact pickup time/window — likely earlier than the other three day tours given the duration]",
+    "pricingTable": null,
+    "faq": [
+      { "q": "Is there a fitness requirement or age limit?", "a": "[TO FILL — worth having a real answer here before this goes live, given how physically demanding this one is compared to the other three day tours]" },
+      { "q": "What happens in bad weather?", "a": "[TO FILL — cancellation/rescheduling policy for weather-dependent tours]" },
+      { "q": "Is this suitable for a first-time hiker?", "a": "No — this is the most demanding tour in the day-tour lineup; the Mongol Culture Park & Bogd Khan Foothills Hike is a better fit for a lighter introduction to the same mountain." }
+    ]
+  },
+  {
+    "slug": "gobi-karakorum-classic",
+    "category": "multi",
+    "order": 1,
+    "published": true,
+    "title": "Gobi Desert & Karakorum Classic",
+    "heroImage": "",
+    "gallery": [],
+    "quickFacts": {
+      "duration": "8 days / 7 nights",
+      "difficulty": "Moderate",
+      "groupSize": "2–12",
+      "priceFrom": 1850,
+      "location": "Gobi Desert, Karakorum"
+    },
+    "fixedNotCustomizable": true,
+    "overview": "The core Gobi route, done at a pace that doesn't feel rushed: singing dunes, dinosaur fossil cliffs, a mountain ice gorge, and a stop at Karakorum, Mongolia's ancient capital, on the way back. Finishes with an evening at Mongol Culture Park instead of just a drive back to a hotel.",
+    "highlights": [
+      "Khongoryn Els singing dunes with a sunrise camel trek",
+      "Yolyn Am ice gorge hike",
+      "Bayanzag Flaming Cliffs — where dinosaur fossils were first discovered",
+      "Erdene Zuu Monastery at Karakorum, Mongolia's ancient capital",
+      "Closing evening at Mongol Culture Park"
+    ],
+    "itinerary": [
+      { "label": "Day 1", "detail": "Arrive Ulaanbaatar, welcome dinner" },
+      { "label": "Day 2", "detail": "Drive south, Baga Gazriin Chuluu granite formations, Tsagaan Suvarga (White Stupa)" },
+      { "label": "Day 3", "detail": "Yolyn Am ice gorge hike, drive to Khongoryn Els singing dunes" },
+      { "label": "Day 4", "detail": "Sunrise camel trek at the dunes, drive to Bayanzag Flaming Cliffs" },
+      { "label": "Day 5", "detail": "Gobi Gurvan Saikhan National Park, Ongi Monastery ruins" },
+      { "label": "Day 6", "detail": "Drive to Karakorum, Erdene Zuu Monastery, Kharkhorin Museum" },
+      { "label": "Day 7", "detail": "Elsen Tasarkhai dunes en route back, evening at Mongol Culture Park (cultural performance, dinner)" },
+      { "label": "Day 8", "detail": "Departure" }
+    ],
+    "included": [
+      "Professional English-speaking guide",
+      "All ground transport",
+      "Accommodation as per itinerary (ger camps, hotel)",
+      "All meals as per itinerary",
+      "Park entrance fees",
+      "Mongol Culture Park performance ticket"
+    ],
+    "notIncluded": [
+      "International flights",
+      "Visa fees",
+      "Travel insurance",
+      "Personal expenses and gratuities",
+      "Alcoholic beverages"
+    ],
+    "goodFor": "Travelers who want the classic Gobi highlights without an overly rushed pace — a strong first Mongolia trip.",
+    "whatToBring": "Layered clothing (desert days are hot, nights are cold), sturdy walking shoes, sun protection, reusable water bottle.",
+    "meetingPoint": "Hotel pickup in Ulaanbaatar on Day 1. [TO FILL: exact pickup time]",
+    "pricingTable": [
+      { "groupSize": "2 pax", "price": 2450 },
+      { "groupSize": "4–5 pax", "price": 2100 },
+      { "groupSize": "6+ pax", "price": 1850 }
+    ],
+    "faq": [
+      { "q": "Can this itinerary be shortened or extended?", "a": "Not on this fixed departure — email or message us if you'd like a custom version." },
+      { "q": "What's the best time of year for this trip?", "a": "[TO FILL — confirm your recommended season window]" },
+      { "q": "Is single accommodation available?", "a": "Yes, for a single supplement — [TO FILL: amount]." }
+    ]
+  },
+  {
+    "slug": "naadam-gobi-explorer",
+    "category": "multi",
+    "order": 2,
+    "published": true,
+    "title": "Naadam Festival & Gobi Desert Explorer",
+    "heroImage": "",
+    "gallery": [],
+    "quickFacts": {
+      "duration": "10 days / 9 nights",
+      "difficulty": "Moderate",
+      "groupSize": "2–12",
+      "priceFrom": 2050,
+      "location": "Ulaanbaatar, Gobi Desert",
+      "fixedDates": "around Naadam (mid-July)"
+    },
+    "fixedNotCustomizable": true,
+    "overview": "Mongolia's biggest festival — wrestling, archery, and horse racing — followed by a full run through the Gobi's dunes and cliffs. Ends back in the capital with a Mongol Culture Park evening rather than a generic last-day city tour.",
+    "highlights": [
+      "Naadam opening ceremony and the \"Three Manly Games\"",
+      "Naadam horse racing at the countryside track",
+      "Khongoryn Els singing dunes and camel trek",
+      "Bayanzag Flaming Cliffs",
+      "Closing evening at Mongol Culture Park"
+    ],
+    "itinerary": [
+      { "label": "Day 1", "detail": "Arrive Ulaanbaatar" },
+      { "label": "Day 2", "detail": "Ulaanbaatar city tour ahead of the festival" },
+      { "label": "Day 3", "detail": "Naadam opening ceremony, wrestling, archery, ankle-bone shooting" },
+      { "label": "Day 4", "detail": "Naadam horse racing, Genghis Khan Statue Complex" },
+      { "label": "Day 5", "detail": "Drive south, Baga Gazriin Chuluu" },
+      { "label": "Day 6", "detail": "Yolyn Am gorge hike" },
+      { "label": "Day 7", "detail": "Khongoryn Els singing dunes, camel trek" },
+      { "label": "Day 8", "detail": "Bayanzag Flaming Cliffs, Tsagaan Suvarga" },
+      { "label": "Day 9", "detail": "Return drive, evening at Mongol Culture Park (cultural performance, dinner)" },
+      { "label": "Day 10", "detail": "Departure" }
+    ],
+    "included": [
+      "Professional English-speaking guide",
+      "All ground transport",
+      "Accommodation and meals as per itinerary",
+      "Naadam festival access",
+      "Park entrance fees",
+      "Mongol Culture Park performance ticket"
+    ],
+    "notIncluded": [
+      "International flights, visa fees, travel insurance",
+      "Personal expenses and gratuities",
+      "Alcoholic beverages"
+    ],
+    "goodFor": "First-time visitors who want Mongolia's biggest cultural event plus the Gobi's landscapes in one trip.",
+    "whatToBring": "Layered clothing, sturdy walking shoes, sun protection, a camera for the festival.",
+    "meetingPoint": "Hotel pickup in Ulaanbaatar on Day 1. [TO FILL: exact pickup time]",
+    "pricingTable": [
+      { "groupSize": "2 pax", "price": 2650 },
+      { "groupSize": "4–5 pax", "price": 2300 },
+      { "groupSize": "6+ pax", "price": 2050 }
+    ],
+    "pricingNote": "Priced above the equivalent non-festival Gobi trip, since Naadam-week accommodation runs at a premium market-wide.",
+    "faq": [
+      { "q": "Do we get reserved seating at Naadam?", "a": "[TO FILL — confirm your actual seating arrangement]" },
+      { "q": "What if the festival dates shift slightly year to year?", "a": "[TO FILL — confirm your policy for aligning departure dates to the official Naadam calendar]" },
+      { "q": "Is single accommodation available?", "a": "Yes, for a single supplement — [TO FILL: amount]." }
+    ]
+  },
+  {
+    "slug": "golden-eagle-festival",
+    "category": "multi",
+    "order": 3,
+    "published": true,
+    "title": "Golden Eagle Festival Tour",
+    "heroImage": "",
+    "gallery": [],
+    "quickFacts": {
+      "duration": "7 days / 6 nights",
+      "difficulty": "Moderate",
+      "groupSize": "2–12",
+      "priceFrom": 2450,
+      "location": "Bayan-Ulgii, Ulaanbaatar",
+      "fixedDates": "around the festival (early October)"
+    },
+    "fixedNotCustomizable": true,
+    "overview": "A trip to Mongolia's westernmost province for the Golden Eagle Festival — Kazakh eagle hunters competing in front-row conditions. Bookended with Ulaanbaatar and a Mongol Culture Park evening instead of a generic Terelj day.",
+    "highlights": [
+      "Golden Eagle Festival opening parade and competitions",
+      "Kazakh eagle hunter family visit",
+      "Bayan-Ulgii's Altai Mountain scenery",
+      "Closing evening at Mongol Culture Park"
+    ],
+    "itinerary": [
+      { "label": "Day 1", "detail": "Arrive Ulaanbaatar, welcome dinner" },
+      { "label": "Day 2", "detail": "Ulaanbaatar city tour" },
+      { "label": "Day 3", "detail": "Domestic flight to Bayan-Ulgii, meet local Kazakh families" },
+      { "label": "Day 4", "detail": "Golden Eagle Festival, day 1 — opening parade and competitions" },
+      { "label": "Day 5", "detail": "Golden Eagle Festival, day 2 — finals, eagle hunter family visit" },
+      { "label": "Day 6", "detail": "Domestic flight back to Ulaanbaatar, evening at Mongol Culture Park (cultural performance, dinner)" },
+      { "label": "Day 7", "detail": "Departure" }
+    ],
+    "included": [
+      "Professional English-speaking guide",
+      "Round-trip domestic flight, Ulaanbaatar–Bayan-Ulgii",
+      "All ground transport, accommodation, and meals as per itinerary",
+      "Festival access",
+      "Mongol Culture Park performance ticket"
+    ],
+    "notIncluded": [
+      "International flights, visa fees, travel insurance",
+      "Personal expenses and gratuities",
+      "Alcoholic beverages"
+    ],
+    "goodFor": "Photographers and cultural travelers specifically drawn to the Golden Eagle Festival — Mongolia's most visually striking annual event.",
+    "whatToBring": "Warm layered clothing (Bayan-Ulgii is cold in October — expect near or below freezing), good walking shoes, camera with a zoom lens if you have one.",
+    "meetingPoint": "Hotel pickup in Ulaanbaatar on Day 1. [TO FILL: exact pickup time]",
+    "pricingTable": [
+      { "groupSize": "2 pax", "price": 2950 },
+      { "groupSize": "4–5 pax", "price": 2650 },
+      { "groupSize": "6+ pax", "price": 2450 }
+    ],
+    "pricingNote": "Priced closer to competitors than the other trips here — the domestic flight and remote-region logistics are a fixed cost regardless of margin.",
+    "faq": [
+      { "q": "How cold does it get during the festival?", "a": "Daytime temperatures are typically near freezing, with colder nights — pack accordingly." },
+      { "q": "Is this trip physically demanding?", "a": "No significant hiking — most time is spent at the festival grounds and traveling by vehicle." },
+      { "q": "Is single accommodation available?", "a": "Yes, for a single supplement — [TO FILL: amount]." }
+    ]
+  },
+  {
+    "slug": "grand-mongolia-highlights",
+    "category": "multi",
+    "order": 4,
+    "published": true,
+    "title": "Grand Mongolia Highlights",
+    "heroImage": "",
+    "gallery": [],
+    "quickFacts": {
+      "duration": "14 days / 13 nights",
+      "difficulty": "Moderate",
+      "groupSize": "2–10",
+      "priceFrom": 2950,
+      "location": "Central Mongolia, Gobi Desert, Lake Khuvsgul"
+    },
+    "fixedNotCustomizable": true,
+    "overview": "The complete route for travelers who want to see the full range of the country in one trip — Central Mongolia, the Gobi Desert, and Lake Khuvsgul — with a Mongol Culture Park stop worked into the Central Mongolia leg instead of a generic Terelj day.",
+    "highlights": [
+      "Hustai National Park's wild Przewalski's horses",
+      "Erdene Zuu Monastery at Karakorum",
+      "Khongoryn Els singing dunes and Bayanzag Flaming Cliffs",
+      "Lake Khuvsgul — Mongolia's largest freshwater lake",
+      "Closing evening at Mongol Culture Park"
+    ],
+    "itinerary": [
+      { "label": "Day 1", "detail": "Arrive Ulaanbaatar, city tour" },
+      { "label": "Day 2", "detail": "Hustai National Park, wild Przewalski's horses" },
+      { "label": "Day 3", "detail": "Karakorum, Erdene Zuu Monastery" },
+      { "label": "Day 4", "detail": "Orkhon Waterfall, Tsenkher hot springs" },
+      { "label": "Day 5", "detail": "Transfer toward the Gobi via Ongi Monastery ruins" },
+      { "label": "Day 6", "detail": "Yolyn Am ice gorge" },
+      { "label": "Day 7", "detail": "Khongoryn Els singing dunes, camel trek" },
+      { "label": "Day 8", "detail": "Bayanzag Flaming Cliffs, Tsagaan Suvarga" },
+      { "label": "Day 9", "detail": "Return via Elsen Tasarkhai dunes" },
+      { "label": "Day 10", "detail": "Return to Ulaanbaatar, domestic flight to Murun" },
+      { "label": "Day 11", "detail": "Lake Khuvsgul, horseback riding along the shore" },
+      { "label": "Day 12", "detail": "Boat trip, reindeer-herder family visit" },
+      { "label": "Day 13", "detail": "Fly back to Ulaanbaatar, evening at Mongol Culture Park (cultural performance, farewell dinner)" },
+      { "label": "Day 14", "detail": "Departure" }
+    ],
+    "included": [
+      "Professional English-speaking guide",
+      "Round-trip domestic flight, Ulaanbaatar–Murun",
+      "All ground transport, accommodation, and meals as per itinerary",
+      "Park entrance fees",
+      "Mongol Culture Park performance ticket"
+    ],
+    "notIncluded": [
+      "International flights, visa fees, travel insurance",
+      "Personal expenses and gratuities",
+      "Alcoholic beverages"
+    ],
+    "goodFor": "Travelers with two weeks who want the full breadth of Mongolia — desert, steppe, mountains, and lake — without piecing together separate trips.",
+    "whatToBring": "Layered clothing for a wide temperature range, sturdy walking shoes, sun protection, swimwear if you plan to get in the lake.",
+    "meetingPoint": "Hotel pickup in Ulaanbaatar on Day 1. [TO FILL: exact pickup time]",
+    "pricingTable": [
+      { "groupSize": "2 pax", "price": 3800 },
+      { "groupSize": "4–5 pax", "price": 3300 },
+      { "groupSize": "6+ pax", "price": 2950 }
+    ],
+    "faq": [
+      { "q": "Is this trip too much for two weeks?", "a": "It covers a lot of ground, but each region gets 3–4 full days rather than rushed stops." },
+      { "q": "What if I only want part of this route?", "a": "See the shorter itineraries — Gobi Desert & Karakorum Classic or Central Mongolia & Khuvsgul Discovery cover subsets of this route." },
+      { "q": "Is single accommodation available?", "a": "Yes, for a single supplement — [TO FILL: amount]." }
+    ]
+  },
+  {
+    "slug": "khuvsgul-horseback-expedition",
+    "category": "multi",
+    "order": 5,
+    "published": true,
+    "title": "Khuvsgul Lake Horseback Expedition",
+    "heroImage": "",
+    "gallery": [],
+    "quickFacts": {
+      "duration": "12 days / 11 nights",
+      "difficulty": "Strenuous (riding)",
+      "groupSize": "4–10 (no 2-pax pricing tier)",
+      "priceFrom": 2850,
+      "location": "Lake Khuvsgul, Darkhad Depression"
+    },
+    "fixedNotCustomizable": true,
+    "overview": "A multi-day horseback trek along Mongolia's largest lake and into the remote Darkhad Depression, with a pack-horse team carrying camp gear each night. This is a genuine wilderness expedition, not a vehicle-based tour — most of your other packages are; this one is priced as your premium, specialized product.",
+    "highlights": [
+      "Multi-day horseback riding along Lake Khuvsgul's shoreline",
+      "Crossing the Horidal Saridag mountain range",
+      "The remote Darkhad Depression, rarely visited by vehicle-based tours",
+      "Nights in mobile tented camps supported by a dedicated pack-horse crew"
+    ],
+    "itinerary": [
+      { "label": "Day 1", "detail": "Arrive Ulaanbaatar, equipment check" },
+      { "label": "Day 2", "detail": "Domestic flight to Murun, transfer to Lake Khuvsgul, horse orientation" },
+      { "label": "Days 3–4", "detail": "Ride along the eastern lake shore" },
+      { "label": "Days 5–6", "detail": "Cross the Horidal Saridag foothills and mountain range" },
+      { "label": "Days 7–8", "detail": "Darkhad Depression, herder family visits" },
+      { "label": "Day 9", "detail": "Begin the return ride" },
+      { "label": "Day 10", "detail": "Return to Lake Khuvsgul" },
+      { "label": "Day 11", "detail": "Fly back to Ulaanbaatar, farewell dinner" },
+      { "label": "Day 12", "detail": "Departure" }
+    ],
+    "included": [
+      "Professional English-speaking guide and local horse wranglers",
+      "Round-trip domestic flight, Ulaanbaatar–Murun",
+      "Horses and pack-support crew",
+      "All accommodation (hotel, ger camp, tented camp) and meals as per itinerary"
+    ],
+    "notIncluded": [
+      "International flights, visa fees, travel insurance",
+      "Personal expenses and gratuities",
+      "Alcoholic beverages",
+      "Riding gear (see What to Bring)"
+    ],
+    "goodFor": "Experienced or adventurous riders who want a real wilderness trek, not a short horseback add-on to a vehicle tour.",
+    "whatToBring": "Riding pants or sturdy trousers, broken-in boots with a small heel, layered clothing, sleeping bag liner, sun protection, basic riding gloves if you have them.",
+    "meetingPoint": "Hotel pickup in Ulaanbaatar on Day 1. [TO FILL: exact pickup time]",
+    "pricingTable": [
+      { "groupSize": "4–6 pax", "price": 3200 },
+      { "groupSize": "7–10 pax", "price": 2850 }
+    ],
+    "pricingNote": "Minimum group size 4 — no solo/pair departures on this itinerary. Priced above the vehicle-based trips due to specialized wrangler and pack-horse logistics.",
+    "faq": [
+      { "q": "Do I need prior riding experience?", "a": "[TO FILL — confirm your actual experience requirement; this is more demanding than a beginner half-day ride]" },
+      { "q": "What happens if someone can't continue riding partway through?", "a": "[TO FILL — worth having a real contingency answer here, given how remote the Darkhad Depression leg is]" },
+      { "q": "Is single accommodation available?", "a": "Limited — [TO FILL: confirm whether tented camp nights can accommodate a single supplement]." }
+    ]
+  },
+  {
+    "slug": "central-mongolia-khuvsgul-discovery",
+    "category": "multi",
+    "order": 6,
+    "published": true,
+    "title": "Central Mongolia & Khuvsgul Discovery",
+    "heroImage": "",
+    "gallery": [],
+    "quickFacts": {
+      "duration": "9 days / 8 nights",
+      "difficulty": "Easy–Moderate",
+      "groupSize": "2–12",
+      "priceFrom": 1800,
+      "location": "Central Mongolia, Lake Khuvsgul"
+    },
+    "fixedNotCustomizable": true,
+    "overview": "A more relaxed alternative to the horseback expedition — the same two regions, vehicle-based instead of multi-day riding, for travelers who want Khuvsgul's scenery without the physical commitment. Ends with Mongol Culture Park instead of a generic last day in the capital.",
+    "highlights": [
+      "Hustai National Park's wild Przewalski's horses",
+      "Erdene Zuu Monastery at Karakorum",
+      "Tsenkher hot springs",
+      "Lake Khuvsgul, with a half-day horseback ride and a boat trip",
+      "Closing evening at Mongol Culture Park"
+    ],
+    "itinerary": [
+      { "label": "Day 1", "detail": "Arrive Ulaanbaatar, city tour" },
+      { "label": "Day 2", "detail": "Hustai National Park, wild horses" },
+      { "label": "Day 3", "detail": "Karakorum, Erdene Zuu Monastery" },
+      { "label": "Day 4", "detail": "Orkhon Waterfall, Tsenkher hot springs" },
+      { "label": "Day 5", "detail": "Return to Ulaanbaatar, domestic flight to Murun, transfer to Lake Khuvsgul" },
+      { "label": "Day 6", "detail": "Horseback riding along the shore (half-day), reindeer-herder family visit" },
+      { "label": "Day 7", "detail": "Boat trip on the lake, free time" },
+      { "label": "Day 8", "detail": "Fly back to Ulaanbaatar, evening at Mongol Culture Park (cultural performance, dinner)" },
+      { "label": "Day 9", "detail": "Departure" }
+    ],
+    "included": [
+      "Professional English-speaking guide",
+      "Round-trip domestic flight, Ulaanbaatar–Murun",
+      "All ground transport, accommodation, and meals as per itinerary",
+      "Park entrance fees",
+      "Mongol Culture Park performance ticket"
+    ],
+    "notIncluded": [
+      "International flights, visa fees, travel insurance",
+      "Personal expenses and gratuities",
+      "Alcoholic beverages"
+    ],
+    "goodFor": "Travelers who want Central Mongolia and Khuvsgul Lake without committing to the full horseback expedition — a good middle-ground trip.",
+    "whatToBring": "Layered clothing, sturdy walking shoes, sun protection, swimwear if you plan to get in the lake.",
+    "meetingPoint": "Hotel pickup in Ulaanbaatar on Day 1. [TO FILL: exact pickup time]",
+    "pricingTable": [
+      { "groupSize": "2 pax", "price": 2350 },
+      { "groupSize": "4–5 pax", "price": 2050 },
+      { "groupSize": "6+ pax", "price": 1800 }
+    ],
+    "faq": [
+      { "q": "How does this differ from the Khuvsgul Lake Horseback Expedition?", "a": "This is vehicle-based with only a half-day of riding, three days shorter, and priced lower — a better fit for travelers who want Khuvsgul without a demanding multi-day trek." },
+      { "q": "Is single accommodation available?", "a": "Yes, for a single supplement — [TO FILL: amount]." }
+    ]
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "name": "mongol-tours",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "seed": "node scripts/seed.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.1.0"
+  }
+}
