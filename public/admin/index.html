@@ -86,7 +86,19 @@
               <select id="f-category"><option value="day">Day Tour</option><option value="multi">Multi-Day</option></select>
             </div>
           </div>
-          <div class="field"><label>Hero image URL (GitHub-hosted)</label><input id="f-heroimage" placeholder="https://raw.githubusercontent.com/..."></div>
+          <div class="field">
+            <label>Hero image</label>
+            <div id="hero-preview-wrap" style="display:none; margin-bottom:.8em;">
+              <img id="hero-preview" style="max-width:100%; max-height:220px; border-radius:3px; border:1px solid var(--line);">
+            </div>
+            <div style="display:flex; gap:.6em; align-items:center; flex-wrap:wrap;">
+              <input type="file" id="hero-file" accept="image/*">
+              <button class="btn btn-sm" id="hero-upload-btn" type="button">Upload</button>
+              <span id="hero-upload-status" class="muted" style="font-size:.8rem;"></span>
+            </div>
+            <input id="f-heroimage" placeholder="https://raw.githubusercontent.com/..." style="margin-top:.6em;">
+            <p class="muted" style="font-size:.78rem; margin-top:.4em;">Upload a photo, or paste a URL directly if it's already hosted somewhere.</p>
+          </div>
         </div>
 
         <div class="editor-section">
@@ -264,6 +276,9 @@
     document.getElementById("f-slug").value = t.slug || "";
     document.getElementById("f-category").value = t.category || currentCat;
     document.getElementById("f-heroimage").value = t.heroImage || "";
+    updateHeroPreview(t.heroImage || "");
+    document.getElementById("hero-file").value = "";
+    document.getElementById("hero-upload-status").textContent = "";
     document.getElementById("f-duration").value = qf.duration || "";
     document.getElementById("f-difficulty").value = qf.difficulty || "";
     document.getElementById("f-groupsize").value = qf.groupSize || "";
@@ -284,6 +299,78 @@
     renderPricing(t.pricingTable || []);
     renderFaq(t.faq || []);
   }
+
+  // Hero image upload
+  const heroFileInput = document.getElementById("hero-file");
+  const heroUploadBtn = document.getElementById("hero-upload-btn");
+  const heroStatus = document.getElementById("hero-upload-status");
+  const heroUrlInput = document.getElementById("f-heroimage");
+  const heroPreviewWrap = document.getElementById("hero-preview-wrap");
+  const heroPreviewImg = document.getElementById("hero-preview");
+
+  function updateHeroPreview(url) {
+    if (url) {
+      heroPreviewImg.src = url;
+      heroPreviewWrap.style.display = "block";
+    } else {
+      heroPreviewWrap.style.display = "none";
+    }
+  }
+  heroUrlInput.addEventListener("change", () => updateHeroPreview(heroUrlInput.value.trim()));
+
+  // Downscale + compress before upload so photos don't bloat the GitHub repo
+  function resizeImage(file, maxWidth = 1600, quality = 0.82) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const reader = new FileReader();
+      reader.onload = () => { img.src = reader.result; };
+      reader.onerror = reject;
+      img.onload = () => {
+        const scale = Math.min(1, maxWidth / img.width);
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      };
+      img.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  heroUploadBtn.addEventListener("click", async () => {
+    const file = heroFileInput.files[0];
+    if (!file) { heroStatus.textContent = "Choose a file first."; return; }
+
+    heroUploadBtn.disabled = true;
+    heroStatus.textContent = "Uploading…";
+
+    try {
+      const dataUrl = await resizeImage(file);
+      const slug = document.getElementById("f-slug").value.trim() || "misc";
+      const res = await fetch("/.netlify/functions/upload-image", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          filename: file.name.replace(/\.\w+$/, ".jpg"),
+          contentBase64: dataUrl,
+          folder: slug
+        })
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const { url } = await res.json();
+      heroUrlInput.value = url;
+      updateHeroPreview(url);
+      heroStatus.textContent = "Uploaded ✓";
+      heroFileInput.value = "";
+    } catch (err) {
+      console.error(err);
+      heroStatus.textContent = "Upload failed — check GitHub settings in Netlify env vars.";
+    } finally {
+      heroUploadBtn.disabled = false;
+    }
+  });
 
   // Itinerary steps
   const itineraryList = document.getElementById("itinerary-list");
