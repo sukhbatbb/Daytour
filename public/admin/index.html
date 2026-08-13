@@ -110,6 +110,16 @@
         </div>
 
         <div class="editor-section">
+          <h4>Gallery (additional photos shown on the tour page)</h4>
+          <div id="gallery-list" class="list-editor"></div>
+          <div style="display:flex; gap:.6em; align-items:center; flex-wrap:wrap; margin-top:.6em;">
+            <input type="file" id="gallery-file" accept="image/*">
+            <button class="btn btn-sm" id="gallery-upload-btn" type="button">Upload photo</button>
+            <span id="gallery-upload-status" class="muted" style="font-size:.8rem;"></span>
+          </div>
+        </div>
+
+        <div class="editor-section">
           <h4>Quick Facts</h4>
           <div class="row2">
             <div class="field"><label>Duration</label><input id="f-duration"></div>
@@ -165,7 +175,7 @@
         </div>
 
         <div class="editor-section" id="pricing-section">
-          <h4>Pricing table (Multi-Day only)</h4>
+          <h4>Pricing table (optional)</h4>
           <div id="pricing-list" class="list-editor"></div>
           <button class="subtle-btn" id="add-pricing-row">+ Add price tier</button>
           <div class="field" style="margin-top:1rem;"><label>Pricing note (optional)</label><input id="f-pricingnote"></div>
@@ -374,6 +384,7 @@
     document.getElementById("f-pricingnote").value = t.pricingNote || "";
     document.getElementById("f-fixed").checked = !!t.fixedNotCustomizable;
 
+    renderGallery(t.gallery || []);
     renderItinerary(t.itinerary || []);
     renderPricing(t.pricingTable || []);
     renderFaq(t.faq || []);
@@ -448,6 +459,49 @@
       heroStatus.textContent = "Upload failed — check GitHub settings in Netlify env vars.";
     } finally {
       heroUploadBtn.disabled = false;
+    }
+  });
+
+  // Gallery photos
+  const galleryList = document.getElementById("gallery-list");
+  const galleryFileInput = document.getElementById("gallery-file");
+  const galleryUploadBtn = document.getElementById("gallery-upload-btn");
+  const galleryStatus = document.getElementById("gallery-upload-status");
+
+  function renderGallery(urls) {
+    galleryList.innerHTML = "";
+    urls.forEach(addGalleryRow);
+  }
+  function addGalleryRow(url = "") {
+    const row = document.createElement("div");
+    row.className = "list-item";
+    row.innerHTML = `
+      <img src="${url.replace(/"/g,"&quot;")}" style="width:64px; height:48px; object-fit:cover; border-radius:4px; border:1px solid var(--line); flex-shrink:0;">
+      <input placeholder="Image URL" class="gallery-url" value="${url.replace(/"/g,"&quot;")}">
+      <button class="btn btn-sm remove" type="button">✕</button>
+    `;
+    const img = row.querySelector("img");
+    const urlInput = row.querySelector(".gallery-url");
+    urlInput.addEventListener("change", () => { img.src = urlInput.value.trim(); });
+    row.querySelector(".remove").addEventListener("click", () => row.remove());
+    galleryList.appendChild(row);
+  }
+  galleryUploadBtn.addEventListener("click", async () => {
+    const file = galleryFileInput.files[0];
+    if (!file) { galleryStatus.textContent = "Choose a file first."; return; }
+    galleryUploadBtn.disabled = true;
+    galleryStatus.textContent = "Uploading…";
+    try {
+      const slug = document.getElementById("f-slug").value.trim() || "misc";
+      const url = await uploadImageFile(file, slug);
+      addGalleryRow(url);
+      galleryStatus.textContent = "Uploaded ✓";
+      galleryFileInput.value = "";
+    } catch (err) {
+      console.error(err);
+      galleryStatus.textContent = "Upload failed — check GitHub settings in Netlify env vars.";
+    } finally {
+      galleryUploadBtn.disabled = false;
     }
   });
 
@@ -548,7 +602,9 @@
       meetingPoint: document.getElementById("f-meetingpoint").value.trim(),
       pricingTable,
       pricingNote: document.getElementById("f-pricingnote").value.trim() || null,
-      fixedNotCustomizable: document.getElementById("f-fixed").checked
+      fixedNotCustomizable: document.getElementById("f-fixed").checked,
+      faq,
+      gallery: [...galleryList.querySelectorAll(".list-item")].map(r => r.querySelector(".gallery-url").value.trim()).filter(Boolean)
     };
   }
 

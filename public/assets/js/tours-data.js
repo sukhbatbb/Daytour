@@ -27,7 +27,7 @@ export async function listTours({ category = null, includeUnpublished = false } 
 
 export async function getTourBySlug(slug) {
   try {
-    const snap = await getDocs(query(collection(db, COLLECTION), where("slug", "==", slug)));
+    const snap = await getDocs(query(collection(db, COLLECTION), where("slug", "==", slug), where("published", "==", true)));
     if (snap.empty) return null;
     const d = snap.docs[0];
     return { id: d.id, ...d.data() };

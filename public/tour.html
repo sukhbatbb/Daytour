@@ -89,6 +89,10 @@
       ? section("Highlights", `<ul class="check-list">${t.highlights.map(h => `<li>${escapeHtml(h)}</li>`).join("")}</ul>`)
       : "";
 
+    const galleryHTML = (t.gallery || []).length
+      ? section("Gallery", `<div class="gallery-grid">${t.gallery.map(url => `<img src="${escapeHtml(url)}" alt="${escapeHtml(t.title)}" loading="lazy">`).join("")}</div>`)
+      : "";
+
     const routeHTML = (t.itinerary || []).length
       ? section(isMulti ? "Itinerary" : "Schedule", `
           <div class="route">
@@ -106,7 +110,7 @@
     const goodForHTML = t.goodFor ? section("Good For", `<p>${escapeHtml(t.goodFor)}</p>`) : "";
     const bringHTML = t.whatToBring ? section("What to Bring", `<p>${escapeHtml(t.whatToBring)}</p>`) : "";
 
-    const pricingHTML = isMulti && t.pricingTable?.length ? `
+    const pricingHTML = t.pricingTable?.length ? `
       <div class="side-card" style="margin-top:24px;">
         <h4>Pricing</h4>
         <table class="pricing">
@@ -145,6 +149,7 @@
             <div>
               ${section("Overview", `<p>${escapeHtml(t.overview || "")}</p>`)}
               ${highlightsHTML}
+              ${galleryHTML}
               ${routeHTML}
               ${includedHTML}
               ${notIncludedHTML}
