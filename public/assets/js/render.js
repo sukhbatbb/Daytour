@@ -33,6 +33,28 @@ export function tourCardHTML(tour) {
   `;
 }
 
+function plainSnippet(text = "", len = 110) {
+  const plain = text.replace(/\[image:[^\]]*\]/gi, "").replace(/\s+/g, " ").trim();
+  return plain.length > len ? plain.slice(0, len) + "…" : plain;
+}
+
+export function destinationCardHTML(d) {
+  const img = d.image
+    ? `<img src="${escapeHtml(d.image)}" alt="${escapeHtml(d.title)}">`
+    : "";
+  const summary = d.summary || plainSnippet(d.description || "");
+  return `
+    <article class="tour-card">
+      <a class="cover" href="/destination.html?slug=${encodeURIComponent(d.slug)}" aria-label="${escapeHtml(d.title)}"></a>
+      <div class="media">${img}</div>
+      <div class="body">
+        <h3>${escapeHtml(d.title)}</h3>
+        <p class="muted" style="font-size:.92rem;">${escapeHtml(summary)}</p>
+      </div>
+    </article>
+  `;
+}
+
 export function emptyStateHTML(msg) {
   return `<div class="empty-state">${escapeHtml(msg)}</div>`;
 }

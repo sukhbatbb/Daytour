@@ -37,6 +37,18 @@ export async function listDestinations({ includeUnpublished = false } = {}) {
   }
 }
 
+export async function getDestinationBySlug(slug) {
+  try {
+    const snap = await getDocs(query(collection(db, "destinations"), where("slug", "==", slug), where("published", "==", true)));
+    if (snap.empty) return null;
+    const d = snap.docs[0];
+    return { id: d.id, ...d.data() };
+  } catch (err) {
+    console.error("getDestinationBySlug failed:", err);
+    return null;
+  }
+}
+
 /** Testimonials collection — each doc: { name, quote, trip, order, published } */
 export async function listTestimonials({ includeUnpublished = false } = {}) {
   try {

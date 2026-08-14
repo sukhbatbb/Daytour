@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="page-title">Destination — Mongol.Tours</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css?v=2">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a class="brand" href="/index.html">Mongol<span>.</span>Tours</a>
+    <div class="nav-links">
+      <a href="/index.html">Home</a>
+      <a href="/tours.html">Tours</a>
+      <a href="/destinations.html" class="active">Destinations</a>
+      <a href="/about.html">About</a>
+      <a href="/faq.html">FAQ</a>
+      <a href="/contact.html">Contact</a>
+    </div>
+    <a class="btn btn-sm" href="/contact.html">Plan a trip</a>
+  </div>
+</nav>
+
+<div id="content">
+  <div class="empty-state" style="padding:120px 20px;">Loading…</div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <h4>Mongol.Tours</h4>
+      <p style="max-width:28ch; font-size:.88rem;">Small-group tours across Mongolia, anchored by Mongol Culture Park.</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <p><a href="/tours.html">Tours</a></p>
+      <p><a href="/destinations.html">Destinations</a></p>
+      <p><a href="/about.html">About</a></p>
+    </div>
+    <div>
+      <h4>Support</h4>
+      <p><a href="/faq.html">FAQ</a></p>
+      <p><a href="/contact.html">Contact</a></p>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <span>© <span id="year"></span> Mongol.Tours</span>
+    <span>Ulaanbaatar, Mongolia</span>
+  </div>
+</footer>
+
+<script type="module">
+  import { getDestinationBySlug, listDestinations } from "/assets/js/content-data.js";
+  import { escapeHtml, richTextHTML, destinationCardHTML, emptyStateHTML } from "/assets/js/render.js";
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  const params = new URLSearchParams(location.search);
+  const slug = params.get("slug");
+  const content = document.getElementById("content");
+
+  async function renderMore(currentSlug) {
+    const all = await listDestinations();
+    const others = all.filter(d => d.slug !== currentSlug).slice(0, 3);
+    if (!others.length) return "";
+    return `
+      <section style="background:var(--paper-dim);">
+        <div class="wrap">
+          <div class="eyebrow">Also on our routes</div>
+          <h2>Other destinations</h2>
+          <div class="card-grid" style="margin-top:2rem;">${others.map(destinationCardHTML).join("")}</div>
+        </div>
+      </section>`;
+  }
+
+  function renderDestination(d) {
+    document.getElementById("page-title").textContent = `${d.title} — Mongol.Tours`;
+    const heroImg = d.image
+      ? `<img src="${escapeHtml(d.image)}" alt="${escapeHtml(d.title)}" style="width:100%; height:100%; object-fit:cover; position:absolute; inset:0;">`
+      : "";
+
+    content.innerHTML = `
+      <header class="hero" style="min-height:340px; display:flex; align-items:flex-end;">
+        ${heroImg}
+        <div class="wrap" style="position:relative; z-index:1; padding-top:0;">
+          <div class="eyebrow">Destination</div>
+          <h1 style="font-size:clamp(2rem,4vw,3rem);">${escapeHtml(d.title)}</h1>
+        </div>
+      </header>
+      <section>
+        <div class="wrap" style="max-width:760px;">
+          ${richTextHTML(d.description || "")}
+          <p style="margin-top:2rem;"><a class="btn btn-primary" href="/tours.html#day">See tours here</a></p>
+        </div>
+      </section>
+      <div id="more-destinations"></div>
+    `;
+  }
+
+  if (!slug) {
+    content.innerHTML = `<div class="empty-state" style="padding:120px 20px;">No destination specified.</div>`;
+  } else {
+    const destination = await getDestinationBySlug(slug);
+    if (!destination) {
+      content.innerHTML = `<div class="empty-state" style="padding:120px 20px;">Destination not found — it may be unpublished or the link is out of date.</div>`;
+    } else {
+      renderDestination(destination);
+      document.getElementById("more-destinations").innerHTML = await renderMore(destination.slug);
+    }
+  }
+</script>
+</body>
+</html>

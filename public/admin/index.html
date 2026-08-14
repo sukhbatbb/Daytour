@@ -685,7 +685,11 @@
             <div class="field"><label>Slug (used as page anchor)</label><input class="d-slug" value="${(d.slug||"").replace(/"/g,"&quot;")}" placeholder="e.g. mongol-culture-park"></div>
           </div>
           <div class="field">
-            <label>Description</label>
+            <label>Short description (shown on the destination card)</label>
+            <input class="d-summary" value="${(d.summary||"").replace(/"/g,"&quot;")}" placeholder="One or two sentences for the card teaser">
+          </div>
+          <div class="field">
+            <label>Full description (shown on the destination's own page)</label>
             <p class="muted" style="font-size:.78rem; margin-top:-.2em; margin-bottom:.5em;">Blank lines start a new paragraph. To place a photo inline, put your cursor where you want it and click "Insert photo into text".</p>
             <textarea class="d-description" style="min-height:80px;">${d.description||""}</textarea>
             <div style="display:flex; gap:.6em; align-items:center; flex-wrap:wrap; margin-top:.5em;">
@@ -695,7 +699,7 @@
             </div>
           </div>
           <div class="field">
-            <label>Image</label>
+            <label>Hero image (shown at the top of the destination's page)</label>
             <div class="d-preview-wrap" style="display:${d.image ? "block":"none"}; margin-bottom:.6em;">
               <img class="d-preview" src="${d.image||""}" style="max-width:100%; max-height:160px; border-radius:3px; border:1px solid var(--line);">
             </div>
@@ -782,6 +786,7 @@
         const data = {
           title,
           slug: row.querySelector(".d-slug").value.trim(),
+          summary: row.querySelector(".d-summary").value.trim(),
           description: row.querySelector(".d-description").value.trim(),
           image: row.querySelector(".d-image").value.trim(),
           order: row.querySelector(".d-order").value ? Number(row.querySelector(".d-order").value) : order,
