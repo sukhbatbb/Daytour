@@ -58,7 +58,7 @@
 
 <script type="module">
   import { listDestinations } from "/assets/js/content-data.js";
-  import { escapeHtml, emptyStateHTML } from "/assets/js/render.js";
+  import { escapeHtml, emptyStateHTML, richTextHTML } from "/assets/js/render.js";
 
   document.getElementById("year").textContent = new Date().getFullYear();
 
@@ -76,7 +76,7 @@
         <div>
           <div class="eyebrow">Our own destination</div>
           <h2>${escapeHtml(featured.title)}</h2>
-          <p class="muted">${escapeHtml(featured.description || "")}</p>
+          <div class="muted">${richTextHTML(featured.description || "")}</div>
           <p><a class="btn btn-sm" href="/tours.html#day">See tours here</a></p>
         </div>
       </div>`;
@@ -91,7 +91,7 @@
           </div>
           <div class="body">
             <h3>${escapeHtml(d.title)}</h3>
-            <p class="muted" style="font-size:.9rem;">${escapeHtml(d.description || "")}</p>
+            <div class="muted" style="font-size:.9rem;">${richTextHTML(d.description || "")}</div>
           </div>
         </div>`).join("")
     : (featured ? "" : emptyStateHTML("Destinations haven't been added yet."));

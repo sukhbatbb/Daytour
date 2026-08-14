@@ -684,7 +684,16 @@
             <div class="field"><label>Title</label><input class="d-title" value="${(d.title||"").replace(/"/g,"&quot;")}"></div>
             <div class="field"><label>Slug (used as page anchor)</label><input class="d-slug" value="${(d.slug||"").replace(/"/g,"&quot;")}" placeholder="e.g. mongol-culture-park"></div>
           </div>
-          <div class="field"><label>Description</label><textarea class="d-description" style="min-height:80px;">${d.description||""}</textarea></div>
+          <div class="field">
+            <label>Description</label>
+            <p class="muted" style="font-size:.78rem; margin-top:-.2em; margin-bottom:.5em;">Blank lines start a new paragraph. To place a photo inline, put your cursor where you want it and click "Insert photo into text".</p>
+            <textarea class="d-description" style="min-height:80px;">${d.description||""}</textarea>
+            <div style="display:flex; gap:.6em; align-items:center; flex-wrap:wrap; margin-top:.5em;">
+              <input type="file" class="d-inline-file" accept="image/*">
+              <button class="btn btn-sm d-inline-upload-btn" type="button">Insert photo into text</button>
+              <span class="d-inline-upload-status muted" style="font-size:.8rem;"></span>
+            </div>
+          </div>
           <div class="field">
             <label>Image</label>
             <div class="d-preview-wrap" style="display:${d.image ? "block":"none"}; margin-bottom:.6em;">
@@ -732,7 +741,28 @@
         fileInput.value = "";
       } catch (err) {
         console.error(err);
-        status.textContent = "Upload failed.";
+        status.textContent = "Upload failed: " + err.message;
+      }
+    });
+    row.querySelector(".d-inline-upload-btn").addEventListener("click", async () => {
+      const fileInput = row.querySelector(".d-inline-file");
+      const status = row.querySelector(".d-inline-upload-status");
+      const file = fileInput.files[0];
+      if (!file) { status.textContent = "Choose a file first."; return; }
+      status.textContent = "Uploading…";
+      try {
+        const slug = row.querySelector(".d-slug").value.trim() || "destination";
+        const url = await uploadImageFile(file, `destinations/${slug}`);
+        const textarea = row.querySelector(".d-description");
+        const pos = textarea.selectionStart ?? textarea.value.length;
+        const before = textarea.value.slice(0, pos).replace(/\n*$/, "\n\n");
+        const after = textarea.value.slice(pos).replace(/^\n*/, "\n\n");
+        textarea.value = before + `[image:${url}]` + after;
+        status.textContent = "Inserted ✓";
+        fileInput.value = "";
+      } catch (err) {
+        console.error(err);
+        status.textContent = "Upload failed: " + err.message;
       }
     });
     destinationsListEl.appendChild(row);
@@ -769,9 +799,9 @@
       btn.textContent = "Saved ✓";
     } catch (err) {
       console.error(err);
-      btn.textContent = "Save failed";
+      btn.textContent = "Save failed: " + err.message;
     } finally {
-      setTimeout(() => { btn.disabled = false; btn.textContent = "Save all"; }, 1500);
+      setTimeout(() => { btn.disabled = false; btn.textContent = "Save all"; }, 3000);
     }
   });
 

@@ -36,3 +36,21 @@ export function tourCardHTML(tour) {
 export function emptyStateHTML(msg) {
   return `<div class="empty-state">${escapeHtml(msg)}</div>`;
 }
+
+/**
+ * Renders blog-style text: blank lines start a new paragraph, and a line
+ * containing only [image:URL] renders as an inline photo instead of text.
+ */
+export function richTextHTML(text = "") {
+  return text
+    .split(/\n\s*\n/)
+    .map(block => block.trim())
+    .filter(Boolean)
+    .map(block => {
+      const imgMatch = block.match(/^\[image:\s*(\S+)\s*\]$/i);
+      return imgMatch
+        ? `<img src="${escapeHtml(imgMatch[1])}" alt="" loading="lazy" style="width:100%; border-radius:var(--radius-sm); margin:.4em 0;">`
+        : `<p>${escapeHtml(block).replace(/\n/g, "<br>")}</p>`;
+    })
+    .join("");
+}
