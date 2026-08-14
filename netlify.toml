@@ -1,3 +1,9 @@
 [build]
   publish = "public"
   functions = "netlify/functions"
+
+[build.environment]
+  # firebase-config.js holds the Firebase Web SDK config, which is designed
+  # to be public (real security is Firestore rules, not this key) — exclude
+  # it so Netlify's secrets scanner stops failing the build on it.
+  SECRETS_SCAN_OMIT_PATHS = "public/assets/js/firebase-config.js"
