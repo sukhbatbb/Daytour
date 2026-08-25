@@ -79,21 +79,24 @@
 
   function renderDestination(d) {
     document.getElementById("page-title").textContent = `${d.title} — Mongol.Tours`;
-    const heroImg = d.image
-      ? `<img src="${escapeHtml(d.image)}" alt="${escapeHtml(d.title)}" style="width:100%; height:100%; object-fit:cover; position:absolute; inset:0;">`
+
+    const coverImg = d.image
+      ? `<img src="${escapeHtml(d.image)}" alt="${escapeHtml(d.title)}" style="width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:var(--radius); display:block;">`
+      : "";
+
+    const extraPhotos = d.gallery || [];
+    const galleryHTML = extraPhotos.length
+      ? `<div class="gallery-grid" style="margin-top:2.4rem;">${extraPhotos.map(url => `<img src="${escapeHtml(url)}" alt="${escapeHtml(d.title)}" loading="lazy">`).join("")}</div>`
       : "";
 
     content.innerHTML = `
-      <header class="hero" style="min-height:340px; display:flex; align-items:flex-end;">
-        ${heroImg}
-        <div class="wrap" style="position:relative; z-index:1; padding-top:0;">
-          <div class="eyebrow">Destination</div>
-          <h1 style="font-size:clamp(2rem,4vw,3rem);">${escapeHtml(d.title)}</h1>
-        </div>
-      </header>
-      <section>
-        <div class="wrap" style="max-width:760px;">
+      <section style="padding-top:112px;">
+        <div class="wrap" style="max-width:800px;">
+          ${coverImg}
+          <div class="eyebrow" style="margin-top:2rem;">Destination</div>
+          <h1>${escapeHtml(d.title)}</h1>
           ${richTextHTML(d.description || "")}
+          ${galleryHTML}
           <p style="margin-top:2rem;"><a class="btn btn-primary" href="/tours.html#day">See tours here</a></p>
         </div>
       </section>

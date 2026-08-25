@@ -710,6 +710,15 @@
             </div>
             <input class="d-image" value="${(d.image||"").replace(/"/g,"&quot;")}" placeholder="https://raw.githubusercontent.com/..." style="margin-top:.6em;">
           </div>
+          <div class="field">
+            <label>Gallery (additional photos shown at the top of the destination's page)</label>
+            <div class="d-gallery-list list-editor"></div>
+            <div style="display:flex; gap:.6em; align-items:center; flex-wrap:wrap; margin-top:.6em;">
+              <input type="file" class="d-gallery-file" accept="image/*">
+              <button class="btn btn-sm d-gallery-upload-btn" type="button">Upload photo</button>
+              <span class="d-gallery-upload-status muted" style="font-size:.8rem;"></span>
+            </div>
+          </div>
           <div class="row2">
             <div class="field"><label>Order</label><input class="d-order" type="number" value="${d.order ?? ""}"></div>
             <div class="field" style="display:flex; gap:1.5rem; align-items:center; padding-top:1.8em;">
@@ -769,6 +778,39 @@
         status.textContent = "Upload failed: " + err.message;
       }
     });
+    const galleryListEl = row.querySelector(".d-gallery-list");
+    function addGalleryPhotoRow(url = "") {
+      const grow = document.createElement("div");
+      grow.className = "list-item";
+      grow.innerHTML = `
+        <img src="${url.replace(/"/g,"&quot;")}" style="width:64px; height:48px; object-fit:cover; border-radius:4px; border:1px solid var(--line); flex-shrink:0;">
+        <input placeholder="Image URL" class="d-gallery-url" value="${url.replace(/"/g,"&quot;")}">
+        <button class="btn btn-sm remove" type="button">✕</button>
+      `;
+      const gimg = grow.querySelector("img");
+      const gurl = grow.querySelector(".d-gallery-url");
+      gurl.addEventListener("change", () => { gimg.src = gurl.value.trim(); });
+      grow.querySelector(".remove").addEventListener("click", () => grow.remove());
+      galleryListEl.appendChild(grow);
+    }
+    (d.gallery || []).forEach(addGalleryPhotoRow);
+    row.querySelector(".d-gallery-upload-btn").addEventListener("click", async () => {
+      const fileInput = row.querySelector(".d-gallery-file");
+      const status = row.querySelector(".d-gallery-upload-status");
+      const file = fileInput.files[0];
+      if (!file) { status.textContent = "Choose a file first."; return; }
+      status.textContent = "Uploading…";
+      try {
+        const slug = row.querySelector(".d-slug").value.trim() || "destination";
+        const url = await uploadImageFile(file, `destinations/${slug}`);
+        addGalleryPhotoRow(url);
+        status.textContent = "Uploaded ✓";
+        fileInput.value = "";
+      } catch (err) {
+        console.error(err);
+        status.textContent = "Upload failed: " + err.message;
+      }
+    });
     destinationsListEl.appendChild(row);
   }
 
@@ -789,6 +831,7 @@
           summary: row.querySelector(".d-summary").value.trim(),
           description: row.querySelector(".d-description").value.trim(),
           image: row.querySelector(".d-image").value.trim(),
+          gallery: [...row.querySelectorAll(".d-gallery-url")].map(el => el.value.trim()).filter(Boolean),
           order: row.querySelector(".d-order").value ? Number(row.querySelector(".d-order").value) : order,
           featured: row.querySelector(".d-featured").checked,
           published: row.querySelector(".d-published").checked
