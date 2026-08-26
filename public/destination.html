@@ -65,16 +65,48 @@
 
   async function renderMore(currentSlug) {
     const all = await listDestinations();
-    const others = all.filter(d => d.slug !== currentSlug).slice(0, 3);
+    const others = all.filter(d => d.slug !== currentSlug);
     if (!others.length) return "";
     return `
       <section style="background:var(--paper-dim);">
         <div class="wrap">
           <div class="eyebrow">Also on our routes</div>
           <h2>Other destinations</h2>
-          <div class="card-grid" style="margin-top:2rem;">${others.map(destinationCardHTML).join("")}</div>
+          <div class="carousel-wrap" style="margin-top:2rem;">
+            <button class="carousel-arrow left" id="more-arrow-left" aria-label="Previous">‹</button>
+            <div class="carousel-track" id="more-track">${others.map(destinationCardHTML).join("")}</div>
+            <button class="carousel-arrow right" id="more-arrow-right" aria-label="Next">›</button>
+          </div>
         </div>
       </section>`;
+  }
+
+  function initCarousel() {
+    const track = document.getElementById("more-track");
+    if (!track) return;
+    document.getElementById("more-arrow-left").addEventListener("click", () => {
+      track.scrollBy({ left: -track.clientWidth * 0.9, behavior: "smooth" });
+    });
+    document.getElementById("more-arrow-right").addEventListener("click", () => {
+      track.scrollBy({ left: track.clientWidth * 0.9, behavior: "smooth" });
+    });
+  }
+
+  function initLightbox() {
+    const overlay = document.createElement("div");
+    overlay.className = "lightbox-overlay";
+    overlay.style.display = "none";
+    overlay.innerHTML = `<button class="lightbox-close" aria-label="Close">×</button><img>`;
+    document.body.appendChild(overlay);
+    const img = overlay.querySelector("img");
+    function close() { overlay.style.display = "none"; }
+    overlay.addEventListener("click", close);
+    document.addEventListener("click", (e) => {
+      const trigger = e.target.closest(".lightbox-trigger");
+      if (!trigger) return;
+      img.src = trigger.dataset.lightbox;
+      overlay.style.display = "flex";
+    });
   }
 
   function renderDestination(d) {
@@ -83,12 +115,14 @@
 
     content.innerHTML = `
       <section style="padding-top:112px;">
-        <div class="wrap" style="max-width:900px;">
+        <div class="wrap">
           <p style="margin-bottom:1.2rem;"><a href="/destinations.html" style="text-decoration:underline; font-weight:600; font-size:.9rem;">← All destinations</a></p>
           ${photosHTML}
           <h1 style="font-size:clamp(1.8rem,3vw,2.4rem); margin-top:1.6rem;">${escapeHtml(d.title)}</h1>
-          ${richTextHTML(d.description || "")}
-          <p style="margin-top:2rem;"><a class="btn btn-primary" href="/tours.html#day">See tours here</a></p>
+          <div style="max-width:760px;">
+            ${richTextHTML(d.description || "")}
+            <p style="margin-top:2rem;"><a class="btn btn-primary" href="/tours.html#day">See tours here</a></p>
+          </div>
         </div>
       </section>
       <div id="more-destinations"></div>
@@ -104,6 +138,8 @@
     } else {
       renderDestination(destination);
       document.getElementById("more-destinations").innerHTML = await renderMore(destination.slug);
+      initCarousel();
+      initLightbox();
     }
   }
 </script>

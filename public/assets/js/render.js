@@ -83,17 +83,17 @@ export function richTextHTML(text = "") {
 export function destinationPhotosHeaderHTML(photos, alt) {
   if (!photos.length) return "";
   if (photos.length === 1) {
-    return `<div class="dest-photos one"><img src="${escapeHtml(photos[0])}" alt="${escapeHtml(alt)}" loading="lazy"></div>`;
+    return `<div class="dest-photos one"><img src="${escapeHtml(photos[0])}" alt="${escapeHtml(alt)}" loading="lazy" class="lightbox-trigger" data-lightbox="${escapeHtml(photos[0])}"></div>`;
   }
   const side = photos.slice(1, 3);
   const extra = photos.length - 3;
   return `
     <div class="dest-photos">
-      <img class="main" src="${escapeHtml(photos[0])}" alt="${escapeHtml(alt)}" loading="lazy">
+      <img class="main lightbox-trigger" src="${escapeHtml(photos[0])}" alt="${escapeHtml(alt)}" loading="lazy" data-lightbox="${escapeHtml(photos[0])}">
       <div class="side">
         ${side.map((url, i) => `
           <div class="side-photo">
-            <img src="${escapeHtml(url)}" alt="${escapeHtml(alt)}" loading="lazy">
+            <img class="lightbox-trigger" src="${escapeHtml(url)}" alt="${escapeHtml(alt)}" loading="lazy" data-lightbox="${escapeHtml(url)}">
             ${i === side.length - 1 && extra > 0 ? `<span class="more-badge">+${extra}</span>` : ""}
           </div>`).join("")}
       </div>
