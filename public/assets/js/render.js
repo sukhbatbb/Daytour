@@ -34,13 +34,22 @@ export function tourCardHTML(tour) {
 }
 
 function plainSnippet(text = "", len = 110) {
-  const plain = text.replace(/\[image:[^\]]*\]/gi, "").replace(/\s+/g, " ").trim();
+  const plain = text.replace(/\s+/g, " ").trim();
   return plain.length > len ? plain.slice(0, len) + "…" : plain;
 }
 
+/** A destination's photos as one ordered array — photos[0] is always the cover.
+ *  Falls back to the older separate image/gallery fields for docs saved before
+ *  they were merged into a single list. */
+export function destinationPhotos(d) {
+  if (Array.isArray(d.photos) && d.photos.length) return d.photos;
+  return [d.image, ...(d.gallery || [])].filter(Boolean);
+}
+
 export function destinationCardHTML(d) {
-  const img = d.image
-    ? `<img src="${escapeHtml(d.image)}" alt="${escapeHtml(d.title)}">`
+  const photos = destinationPhotos(d);
+  const img = photos[0]
+    ? `<img src="${escapeHtml(photos[0])}" alt="${escapeHtml(d.title)}">`
     : "";
   const summary = d.summary || plainSnippet(d.description || "");
   return `
@@ -59,20 +68,34 @@ export function emptyStateHTML(msg) {
   return `<div class="empty-state">${escapeHtml(msg)}</div>`;
 }
 
-/**
- * Renders blog-style text: blank lines start a new paragraph, and a line
- * containing only [image:URL] renders as an inline photo instead of text.
- */
+/** Renders blog-style text: blank lines start a new paragraph. */
 export function richTextHTML(text = "") {
   return text
     .split(/\n\s*\n/)
     .map(block => block.trim())
     .filter(Boolean)
-    .map(block => {
-      const imgMatch = block.match(/^\[image:\s*(\S+)\s*\]$/i);
-      return imgMatch
-        ? `<img src="${escapeHtml(imgMatch[1])}" alt="" loading="lazy" style="width:100%; border-radius:var(--radius-sm); margin:.4em 0;">`
-        : `<p>${escapeHtml(block).replace(/\n/g, "<br>")}</p>`;
-    })
+    .map(block => `<p>${escapeHtml(block).replace(/\n/g, "<br>")}</p>`)
     .join("");
+}
+
+/** Renders a TripAdvisor-style photo header: one big cover photo plus up to
+ *  two smaller photos beside it, with a "+N" badge if there are more. */
+export function destinationPhotosHeaderHTML(photos, alt) {
+  if (!photos.length) return "";
+  if (photos.length === 1) {
+    return `<div class="dest-photos one"><img src="${escapeHtml(photos[0])}" alt="${escapeHtml(alt)}" loading="lazy"></div>`;
+  }
+  const side = photos.slice(1, 3);
+  const extra = photos.length - 3;
+  return `
+    <div class="dest-photos">
+      <img class="main" src="${escapeHtml(photos[0])}" alt="${escapeHtml(alt)}" loading="lazy">
+      <div class="side">
+        ${side.map((url, i) => `
+          <div class="side-photo">
+            <img src="${escapeHtml(url)}" alt="${escapeHtml(alt)}" loading="lazy">
+            ${i === side.length - 1 && extra > 0 ? `<span class="more-badge">+${extra}</span>` : ""}
+          </div>`).join("")}
+      </div>
+    </div>`;
 }

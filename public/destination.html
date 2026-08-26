@@ -55,7 +55,7 @@
 
 <script type="module">
   import { getDestinationBySlug, listDestinations } from "/assets/js/content-data.js";
-  import { escapeHtml, richTextHTML, destinationCardHTML, emptyStateHTML } from "/assets/js/render.js";
+  import { escapeHtml, richTextHTML, destinationCardHTML, destinationPhotos, destinationPhotosHeaderHTML, emptyStateHTML } from "/assets/js/render.js";
 
   document.getElementById("year").textContent = new Date().getFullYear();
 
@@ -79,24 +79,15 @@
 
   function renderDestination(d) {
     document.getElementById("page-title").textContent = `${d.title} — Mongol.Tours`;
-
-    const coverImg = d.image
-      ? `<img src="${escapeHtml(d.image)}" alt="${escapeHtml(d.title)}" style="width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:var(--radius); display:block;">`
-      : "";
-
-    const extraPhotos = d.gallery || [];
-    const galleryHTML = extraPhotos.length
-      ? `<div class="gallery-grid" style="margin-top:2.4rem;">${extraPhotos.map(url => `<img src="${escapeHtml(url)}" alt="${escapeHtml(d.title)}" loading="lazy">`).join("")}</div>`
-      : "";
+    const photosHTML = destinationPhotosHeaderHTML(destinationPhotos(d), d.title);
 
     content.innerHTML = `
       <section style="padding-top:112px;">
-        <div class="wrap" style="max-width:800px;">
-          ${coverImg}
-          <div class="eyebrow" style="margin-top:2rem;">Destination</div>
-          <h1>${escapeHtml(d.title)}</h1>
+        <div class="wrap" style="max-width:900px;">
+          <p style="margin-bottom:1.2rem;"><a href="/destinations.html" style="text-decoration:underline; font-weight:600; font-size:.9rem;">← All destinations</a></p>
+          ${photosHTML}
+          <h1 style="font-size:clamp(1.8rem,3vw,2.4rem); margin-top:1.6rem;">${escapeHtml(d.title)}</h1>
           ${richTextHTML(d.description || "")}
-          ${galleryHTML}
           <p style="margin-top:2rem;"><a class="btn btn-primary" href="/tours.html#day">See tours here</a></p>
         </div>
       </section>

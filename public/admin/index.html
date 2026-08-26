@@ -232,35 +232,18 @@
 
           <div class="editor-section">
             <h4>Full description (shown on the destination's own page)</h4>
-            <p class="muted" style="font-size:.82rem; margin-top:-.6em; margin-bottom:1em;">Blank lines start a new paragraph. To place a photo inline, put your cursor where you want it and click "Insert photo into text".</p>
+            <p class="muted" style="font-size:.82rem; margin-top:-.6em; margin-bottom:1em;">Blank lines start a new paragraph.</p>
             <div class="field"><textarea id="d-description" style="min-height:160px;"></textarea></div>
-            <div style="display:flex; gap:.6em; align-items:center; flex-wrap:wrap;">
-              <input type="file" id="d-inline-file" accept="image/*">
-              <button class="btn btn-sm" id="d-inline-upload-btn" type="button">Insert photo into text</button>
-              <span id="d-inline-upload-status" class="muted" style="font-size:.8rem;"></span>
-            </div>
           </div>
 
           <div class="editor-section">
-            <h4>Hero image (shown at the top of the destination's page)</h4>
-            <div id="d-preview-wrap" style="display:none; margin-bottom:.8em;">
-              <img id="d-preview" style="max-width:100%; max-height:220px; border-radius:3px; border:1px solid var(--line);">
-            </div>
-            <div style="display:flex; gap:.6em; align-items:center; flex-wrap:wrap;">
-              <input type="file" id="d-file" accept="image/*">
-              <button class="btn btn-sm" id="d-upload-btn" type="button">Upload</button>
-              <span id="d-upload-status" class="muted" style="font-size:.8rem;"></span>
-            </div>
-            <input id="d-image" placeholder="https://raw.githubusercontent.com/..." style="margin-top:.6em;">
-          </div>
-
-          <div class="editor-section">
-            <h4>Gallery (additional photos shown at the top of the destination's page)</h4>
-            <div id="d-gallery-list" class="list-editor"></div>
+            <h4>Photos</h4>
+            <p class="muted" style="font-size:.82rem; margin-top:-.6em; margin-bottom:1em;">The first photo is the cover shown on the card and at the top of the page. Use the arrows to reorder.</p>
+            <div id="d-photos-list" class="list-editor"></div>
             <div style="display:flex; gap:.6em; align-items:center; flex-wrap:wrap; margin-top:.6em;">
-              <input type="file" id="d-gallery-file" accept="image/*">
-              <button class="btn btn-sm" id="d-gallery-upload-btn" type="button">Upload photo</button>
-              <span id="d-gallery-upload-status" class="muted" style="font-size:.8rem;"></span>
+              <input type="file" id="d-photo-file" accept="image/*">
+              <button class="btn btn-sm" id="d-photo-upload-btn" type="button">Upload photo</button>
+              <span id="d-photo-upload-status" class="muted" style="font-size:.8rem;"></span>
             </div>
           </div>
         </div>
@@ -310,6 +293,7 @@
   import { auth, db, signInWithEmailAndPassword, onAuthStateChanged, signOut,
            collection, doc, getDoc, getDocs, addDoc, setDoc, deleteDoc, query, where }
     from "/assets/js/firebase-init.js";
+  import { destinationPhotos } from "/assets/js/render.js";
 
   const loginScreen = document.getElementById("login-screen");
   const appEl = document.getElementById("app");
@@ -762,30 +746,51 @@
     loadDestinations();
   });
 
-  function updateDestPreview(url) {
-    const wrap = document.getElementById("d-preview-wrap");
-    const img = document.getElementById("d-preview");
-    if (url) { img.src = url; wrap.style.display = "block"; } else { wrap.style.display = "none"; }
+  const destPhotosListEl = document.getElementById("d-photos-list");
+
+  function refreshPhotoLabels() {
+    const rows = [...destPhotosListEl.children];
+    rows.forEach((row, i) => {
+      row.querySelector(".photo-label").textContent = i === 0 ? "Cover" : `#${i + 1}`;
+      row.querySelector(".move-up").disabled = i === 0;
+      row.querySelector(".move-down").disabled = i === rows.length - 1;
+    });
   }
 
-  const destGalleryListEl = document.getElementById("d-gallery-list");
-  function renderDestGallery(urls) {
-    destGalleryListEl.innerHTML = "";
-    urls.forEach(addDestGalleryRow);
+  function renderDestPhotos(urls) {
+    destPhotosListEl.innerHTML = "";
+    urls.forEach(addDestPhotoRow);
+    refreshPhotoLabels();
   }
-  function addDestGalleryRow(url = "") {
+
+  function addDestPhotoRow(url = "") {
     const row = document.createElement("div");
     row.className = "list-item";
+    row.style.alignItems = "center";
     row.innerHTML = `
+      <span class="photo-label badge" style="flex-shrink:0; min-width:52px; text-align:center;"></span>
       <img src="${url.replace(/"/g,"&quot;")}" style="width:64px; height:48px; object-fit:cover; border-radius:4px; border:1px solid var(--line); flex-shrink:0;">
-      <input placeholder="Image URL" class="dest-gallery-url" value="${url.replace(/"/g,"&quot;")}">
+      <input placeholder="Image URL" class="dest-photo-url" value="${url.replace(/"/g,"&quot;")}">
+      <button class="btn btn-sm move-up" type="button" title="Move up">↑</button>
+      <button class="btn btn-sm move-down" type="button" title="Move down">↓</button>
       <button class="btn btn-sm remove" type="button">✕</button>
     `;
     const img = row.querySelector("img");
-    const urlInput = row.querySelector(".dest-gallery-url");
+    const urlInput = row.querySelector(".dest-photo-url");
     urlInput.addEventListener("change", () => { img.src = urlInput.value.trim(); });
-    row.querySelector(".remove").addEventListener("click", () => row.remove());
-    destGalleryListEl.appendChild(row);
+    row.querySelector(".remove").addEventListener("click", () => { row.remove(); refreshPhotoLabels(); });
+    row.querySelector(".move-up").addEventListener("click", () => {
+      const prev = row.previousElementSibling;
+      if (prev) destPhotosListEl.insertBefore(row, prev);
+      refreshPhotoLabels();
+    });
+    row.querySelector(".move-down").addEventListener("click", () => {
+      const next = row.nextElementSibling;
+      if (next) destPhotosListEl.insertBefore(next, row);
+      refreshPhotoLabels();
+    });
+    destPhotosListEl.appendChild(row);
+    refreshPhotoLabels();
   }
 
   function openDestinationEditor(id) {
@@ -801,68 +806,21 @@
     document.getElementById("d-featured").checked = !!d.featured;
     document.getElementById("d-summary").value = d.summary || "";
     document.getElementById("d-description").value = d.description || "";
-    document.getElementById("d-image").value = d.image || "";
-    updateDestPreview(d.image || "");
-    document.getElementById("d-file").value = "";
-    document.getElementById("d-upload-status").textContent = "";
-    document.getElementById("d-inline-file").value = "";
-    document.getElementById("d-inline-upload-status").textContent = "";
-    renderDestGallery(d.gallery || []);
+    document.getElementById("d-photo-file").value = "";
+    document.getElementById("d-photo-upload-status").textContent = "";
+    renderDestPhotos(destinationPhotos(d));
   }
 
-  document.getElementById("d-image").addEventListener("change", (e) => updateDestPreview(e.target.value.trim()));
-
-  document.getElementById("d-upload-btn").addEventListener("click", async () => {
-    const fileInput = document.getElementById("d-file");
-    const status = document.getElementById("d-upload-status");
+  document.getElementById("d-photo-upload-btn").addEventListener("click", async () => {
+    const fileInput = document.getElementById("d-photo-file");
+    const status = document.getElementById("d-photo-upload-status");
     const file = fileInput.files[0];
     if (!file) { status.textContent = "Choose a file first."; return; }
     status.textContent = "Uploading…";
     try {
       const slug = document.getElementById("d-slug").value.trim() || "destination";
       const url = await uploadImageFile(file, `destinations/${slug}`);
-      document.getElementById("d-image").value = url;
-      updateDestPreview(url);
-      status.textContent = "Uploaded ✓";
-      fileInput.value = "";
-    } catch (err) {
-      console.error(err);
-      status.textContent = "Upload failed: " + err.message;
-    }
-  });
-
-  document.getElementById("d-inline-upload-btn").addEventListener("click", async () => {
-    const fileInput = document.getElementById("d-inline-file");
-    const status = document.getElementById("d-inline-upload-status");
-    const file = fileInput.files[0];
-    if (!file) { status.textContent = "Choose a file first."; return; }
-    status.textContent = "Uploading…";
-    try {
-      const slug = document.getElementById("d-slug").value.trim() || "destination";
-      const url = await uploadImageFile(file, `destinations/${slug}`);
-      const textarea = document.getElementById("d-description");
-      const pos = textarea.selectionStart ?? textarea.value.length;
-      const before = textarea.value.slice(0, pos).replace(/\n*$/, "\n\n");
-      const after = textarea.value.slice(pos).replace(/^\n*/, "\n\n");
-      textarea.value = before + `[image:${url}]` + after;
-      status.textContent = "Inserted ✓";
-      fileInput.value = "";
-    } catch (err) {
-      console.error(err);
-      status.textContent = "Upload failed: " + err.message;
-    }
-  });
-
-  document.getElementById("d-gallery-upload-btn").addEventListener("click", async () => {
-    const fileInput = document.getElementById("d-gallery-file");
-    const status = document.getElementById("d-gallery-upload-status");
-    const file = fileInput.files[0];
-    if (!file) { status.textContent = "Choose a file first."; return; }
-    status.textContent = "Uploading…";
-    try {
-      const slug = document.getElementById("d-slug").value.trim() || "destination";
-      const url = await uploadImageFile(file, `destinations/${slug}`);
-      addDestGalleryRow(url);
+      addDestPhotoRow(url);
       status.textContent = "Uploaded ✓";
       fileInput.value = "";
     } catch (err) {
@@ -882,8 +840,7 @@
       slug,
       summary: document.getElementById("d-summary").value.trim(),
       description: document.getElementById("d-description").value.trim(),
-      image: document.getElementById("d-image").value.trim(),
-      gallery: [...destGalleryListEl.querySelectorAll(".dest-gallery-url")].map(el => el.value.trim()).filter(Boolean),
+      photos: [...destPhotosListEl.querySelectorAll(".dest-photo-url")].map(el => el.value.trim()).filter(Boolean),
       featured: document.getElementById("d-featured").checked,
       published: publish,
       order: editingDestinationId
