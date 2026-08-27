@@ -1,4 +1,4 @@
-import { db, doc, getDoc, collection, getDocs, query, where, orderBy } from "./firebase-init.js";
+import { db, doc, getDoc, collection, getDocs, addDoc, query, where, orderBy, serverTimestamp } from "./firebase-init.js";
 
 /** About page content: { mongoliaIntro, companyStory } stored at siteContent/about */
 export async function getAboutContent() {
@@ -47,6 +47,15 @@ export async function getDestinationBySlug(slug) {
     console.error("getDestinationBySlug failed:", err);
     return null;
   }
+}
+
+/** Contact form submissions — each doc: { name, email, tour, dates, message, createdAt }.
+ *  Public write-only: anyone can submit, only the logged-in admin can read them back. */
+export async function submitEnquiry({ name, email, tour, dates, message }) {
+  await addDoc(collection(db, "enquiries"), {
+    name, email, tour: tour || "", dates: dates || "", message,
+    createdAt: serverTimestamp()
+  });
 }
 
 /** Testimonials collection — each doc: { name, quote, trip, order, published } */

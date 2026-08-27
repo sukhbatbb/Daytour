@@ -77,7 +77,9 @@
   <div class="wrap footer-bottom"><span>© <span id="year"></span> Mongol.Tours</span><span>Ulaanbaatar, Mongolia</span></div>
 </footer>
 
-<script>
+<script type="module">
+  import { submitEnquiry } from "/assets/js/content-data.js";
+
   document.getElementById("year").textContent = new Date().getFullYear();
 
   // Pre-fill tour field if arriving from a tour page (?tour=slug)
@@ -98,20 +100,26 @@
 
     const data = Object.fromEntries(new FormData(form).entries());
     try {
-      const res = await fetch("/.netlify/functions/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-      if (!res.ok) throw new Error("Request failed");
+      await submitEnquiry(data);
       form.reset();
-      status.textContent = "Message sent — we'll get back to you by email soon.";
+      status.textContent = "Message sent — we'll get back to you soon.";
     } catch (err) {
-      status.textContent = "Something went wrong sending your message — please email us directly instead.";
-    } finally {
+      console.error("submitEnquiry failed:", err);
+      status.textContent = "Something went wrong sending your message — please email or WhatsApp us directly instead.";
       btn.disabled = false;
       btn.textContent = "Send message";
+      return;
     }
+    btn.disabled = false;
+    btn.textContent = "Send message";
+
+    // Best-effort email notification — the message is already saved above,
+    // so this failing silently doesn't affect the visitor's success message.
+    fetch("/.netlify/functions/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    }).catch(() => {});
   });
 </script>
 </body>
